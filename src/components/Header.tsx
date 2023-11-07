@@ -1,13 +1,9 @@
+import { NavLink } from 'react-router-dom';
 import { PageName, Paths } from '../helpers/paths';
 
-export type HeaderOptions = {
-  currentPage: PageName;
-  pages: PageName[];
-  setCurrentPage: (page: PageName) => void;
-};
+const pages = [PageName.Home, PageName.Login, PageName.Register];
 
-export function Header({ pages, currentPage, setCurrentPage }: HeaderOptions) {
-  console.log(`current page ${currentPage}`);
+export function Header() {
   return (
     <nav className="navbar navbar-light">
       <div className="container">
@@ -16,15 +12,16 @@ export function Header({ pages, currentPage, setCurrentPage }: HeaderOptions) {
         </a>
         <ul className="nav navbar-nav pull-xs-right">
           {pages.map((page: PageName, idx: number) => {
-            console.log(`page ${page}`);
             return (
-              <li className="nav-item" key={idx} onClick={() => setCurrentPage(page)}>
-                <a
-                  className={page === currentPage ? 'nav-link active' : 'nav-link'}
-                  href={Paths[page]()}
+              <li className="nav-item" key={idx}>
+                <NavLink
+                  to={Paths[page]}
+                  className={({ isActive, isPending }) =>
+                    `nav-link ${isPending ? 'pending' : isActive ? 'active' : ''}`
+                  }
                 >
                   {page}
-                </a>
+                </NavLink>
               </li>
             );
           })}

@@ -5,7 +5,7 @@ export enum PageName {
 }
 
 export const Paths = {
-  [PageName.Home]: () => `/`,
-  [PageName.Login]: () => `/login`,
-  [PageName.Register]: () => `/register`,
+  [PageName.Home]: `/`,
+  [PageName.Login]: `/login`,
+  [PageName.Register]: `/register`,
 };
