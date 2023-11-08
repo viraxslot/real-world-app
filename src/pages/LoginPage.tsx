@@ -9,6 +9,8 @@ import { Header } from '../components/Header';
 import { PageName, Paths } from '../helpers/paths';
 import { ErrorObject } from '../shared/types';
 import { login, selectLoginStatus } from '../store/reducers/loginStatus';
+import { setProfile } from '../store/reducers/userProfile';
+import { defaultUsername } from '../shared/constants';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -35,6 +37,11 @@ export default function LoginPage() {
     if (response.status === 200 && !body.errors) {
       setErrors(null);
       dispatch(login());
+      dispatch(
+        setProfile({
+          username: body?.user?.username ?? defaultUsername,
+        }),
+      );
     }
   }
 
