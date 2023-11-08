@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "prettier:fix": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,html}\"",
     "prepare": "husky install",
-    "code:checks": "prettier --check src/"
+    "code:checks": "prettier --check src/ && yarn lint"
   },
   "dependencies": {
     "react": "^18.2.0",
