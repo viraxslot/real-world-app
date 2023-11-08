@@ -4,10 +4,12 @@ import { Header } from '../components/Header';
 import { PageName, Paths } from '../helpers/paths';
 import { useState } from 'react';
 import { ApiClient } from '../api/api-client';
-import { ErrorObject, SignUpBody } from '../api/types';
+import { SignUpBody } from '../api/types';
+import { ErrorObject } from '../shared/types';
+import { ErrorList } from '../components/ErrorList';
 
-export default function SignUpPage() {
-  const [errors, setErrors] = useState<ErrorObject>({});
+export default function RegisterPage() {
+  const [errors, setErrors] = useState<ErrorObject | null>(null);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,7 +17,6 @@ export default function SignUpPage() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setErrors({});
     const response = await ApiClient.signUp({
       user: {
         username,
@@ -30,6 +31,7 @@ export default function SignUpPage() {
     }
 
     if (response.status == 200 && !body?.errors) {
+      setErrors(null);
       setUserCreated(true);
     }
   }
@@ -48,15 +50,7 @@ export default function SignUpPage() {
               </Link>
             </p>
 
-            {Object.keys(errors).length > 0 ? (
-              <ul className="error-messages">
-                {Object.keys(errors).map((key) => (
-                  <li>
-                    {key} {errors[key][0]}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+            <ErrorList errors={errors} />
 
             {userCreated ? (
               <p className="text-xs-center">User successfully created!</p>
@@ -68,7 +62,10 @@ export default function SignUpPage() {
                     type="text"
                     placeholder="Username"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                      setErrors(null);
+                    }}
                   />
                 </fieldset>
                 <fieldset className="form-group">
@@ -77,7 +74,10 @@ export default function SignUpPage() {
                     type="text"
                     placeholder="Email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setErrors(null);
+                    }}
                   />
                 </fieldset>
                 <fieldset className="form-group">
@@ -86,7 +86,10 @@ export default function SignUpPage() {
                     type="password"
                     placeholder="Password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setErrors(null);
+                    }}
                   />
                 </fieldset>
                 <button className="btn btn-lg btn-primary pull-xs-right">Sign up</button>

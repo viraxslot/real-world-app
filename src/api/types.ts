@@ -1,4 +1,4 @@
-export type ErrorObject = Record<string, string[]>;
+import { ErrorObject } from '../shared/types';
 
 export type ApiError = {
   errors?: ErrorObject;
@@ -21,3 +21,12 @@ export type SignUpBody = ApiError & {
     token: string;
   };
 };
+
+export type SignInRequest = {
+  user: {
+    email: string;
+    password: string;
+  };
+};
+
+export type SignInBody = SignUpBody;
