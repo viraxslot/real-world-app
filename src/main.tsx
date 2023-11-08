@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HomePage } from './pages/HomePage.tsx';
-import './index.css';
+import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import ErrorPage from './pages/ErrorPage.tsx';
-import LoginPage from './pages/LoginPage.tsx';
 import { PageName, Paths } from './helpers/paths.ts';
+import './index.css';
+import ErrorPage from './pages/ErrorPage.tsx';
+import { HomePage } from './pages/HomePage.tsx';
+import LoginPage from './pages/LoginPage.tsx';
 import RegisterPage from './pages/RegisterPage.tsx';
+import { store } from './store/store.ts';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <Provider store={store}>
+      <RouterProvider router={router}></RouterProvider>
+    </Provider>
   </React.StrictMode>,
 );

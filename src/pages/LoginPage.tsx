@@ -1,18 +1,21 @@
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { ApiClient } from '../api/api-client';
+import { SignInBody } from '../api/types';
+import { ErrorList } from '../components/ErrorList';
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { PageName, Paths } from '../helpers/paths';
-import { useState } from 'react';
-import { ApiClient } from '../api/api-client';
-import { SignInBody } from '../api/types';
 import { ErrorObject } from '../shared/types';
-import { ErrorList } from '../components/ErrorList';
+import { login, selectLoginStatus } from '../store/reducers/loginStatus';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<ErrorObject | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectLoginStatus);
 
   async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,7 +34,7 @@ export default function LoginPage() {
 
     if (response.status === 200 && !body.errors) {
       setErrors(null);
-      setIsLoggedIn(true);
+      dispatch(login());
     }
   }
 
