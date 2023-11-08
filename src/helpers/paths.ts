@@ -13,5 +13,5 @@ export const Paths = {
   [PageName.Register]: `/register`,
   [PageName.Editor]: `/editor`,
   [PageName.Settings]: `/settings`,
-  [PageName.Profile]: (username: string) => `/profile/${username}`,
+  [PageName.Profile]: (username = ':username') => `/profile/${username}`,
 };

@@ -12,7 +12,7 @@ import { login, selectLoginStatus } from '../store/reducers/loginStatus';
 import { setProfile } from '../store/reducers/userProfile';
 import { defaultUsername } from '../shared/constants';
 
-export default function LoginPage() {
+export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<ErrorObject | null>(null);

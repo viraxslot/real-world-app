@@ -8,7 +8,7 @@ import { SignUpBody } from '../api/types';
 import { ErrorObject } from '../shared/types';
 import { ErrorList } from '../components/ErrorList';
 
-export default function RegisterPage() {
+export function RegisterPage() {
   const [errors, setErrors] = useState<ErrorObject | null>(null);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');

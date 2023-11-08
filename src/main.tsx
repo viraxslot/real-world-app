@@ -4,11 +4,14 @@ import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { PageName, Paths } from './helpers/paths.ts';
 import './index.css';
-import ErrorPage from './pages/ErrorPage.tsx';
+import { EditorPage } from './pages/EditorPage.tsx';
+import { ErrorPage } from './pages/ErrorPage.tsx';
 import { HomePage } from './pages/HomePage.tsx';
-import LoginPage from './pages/LoginPage.tsx';
-import RegisterPage from './pages/RegisterPage.tsx';
+import { LoginPage } from './pages/LoginPage.tsx';
+import { RegisterPage } from './pages/RegisterPage.tsx';
+import { SettingsPage } from './pages/SettingsPage.tsx';
 import { store } from './store/store.ts';
+import { ProfilePage } from './pages/ProfilePage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +26,18 @@ const router = createBrowserRouter([
   {
     path: Paths[PageName.Register],
     element: <RegisterPage />,
+  },
+  {
+    path: Paths[PageName.Editor],
+    element: <EditorPage />,
+  },
+  {
+    path: Paths[PageName.Settings],
+    element: <SettingsPage />,
+  },
+  {
+    path: Paths[PageName.Profile](),
+    element: <ProfilePage />,
   },
 ]);
 
