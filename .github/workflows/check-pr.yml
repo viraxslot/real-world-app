@@ -12,8 +12,8 @@ jobs:
 
       - uses: ./.github/actions/setup-node
 
-      - name: Check types
-        run: yarn tsc -p tsconfig.json --noEmit
-
       - name: Run pipeline checks
         run: yarn code:checks
+
+      - name: Build
+        run: yarn build
