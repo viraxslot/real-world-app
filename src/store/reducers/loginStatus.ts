@@ -4,18 +4,18 @@ import { RootState } from '../store';
 export const loginStatusSlice = createSlice({
   name: 'loginStatus',
   initialState: {
-    value: false,
+    loggedIn: false,
   },
   reducers: {
     login: (state) => {
-      state.value = true;
+      state.loggedIn = true;
     },
     logout: (state) => {
-      state.value = false;
+      state.loggedIn = false;
     },
   },
 });
 
-export const selectLoginStatus = (state: RootState) => state.loginStatus.value;
+export const selectLoginStatus = (state: RootState) => state.loginStatus.loggedIn;
 export const { login, logout } = loginStatusSlice.actions;
 export default loginStatusSlice.reducer;
