@@ -1,12 +1,5 @@
-import { Footer } from '../components/Footer';
-import { Header } from '../components/Header';
+import { BasePage } from './BasePage';
 
 export function HomePage() {
-  return (
-    <div id="home-page">
-      <Header />
-      <p>Home page</p>
-      <Footer />
-    </div>
-  );
+  return <BasePage pageClass="home-page" children={<p>Home page placeholder</p>} />;
 }

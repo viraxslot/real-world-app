@@ -1,13 +1,11 @@
+import { ReactNode, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { AuthContext } from '../context/auth-context';
 import { PageName, Paths } from '../helpers/paths';
-import { useSelector } from 'react-redux';
-import { selectLoginStatus } from '../store/reducers/loginStatus';
-import { ReactNode } from 'react';
-import { selectUsername } from '../store/reducers/userProfile';
 
 type HeaderItemProps = {
   link: string;
-  children: string | ReactNode;
+  children: ReactNode;
 };
 
 function HeaderItem({ link, children }: HeaderItemProps) {
@@ -26,8 +24,8 @@ function HeaderItem({ link, children }: HeaderItemProps) {
 }
 
 export function Header() {
-  const isLoggedIn = useSelector(selectLoginStatus);
-  const username = useSelector(selectUsername);
+  const auth = useContext(AuthContext);
+  console.log(`Header: ${auth.isAuthenticated}, ${auth.username}`);
 
   return (
     <nav className="navbar navbar-light">
@@ -37,7 +35,7 @@ export function Header() {
         </a>
         <ul className="nav navbar-nav pull-xs-right">
           <HeaderItem link={Paths[PageName.Home]} children={PageName.Home} />
-          {isLoggedIn ? (
+          {auth.isAuthenticated ? (
             <>
               <HeaderItem
                 link={Paths[PageName.Editor]}
@@ -57,11 +55,11 @@ export function Header() {
                 }
               />
               <HeaderItem
-                link={Paths[PageName.Profile](username as string)}
+                link={Paths[PageName.Profile](auth.username as string)}
                 children={
                   <>
                     <img src="" className="user-pic" />
-                    {username}
+                    {auth.username}
                   </>
                 }
               />

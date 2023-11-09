@@ -1,7 +1,6 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { AuthContext, defaultAuth } from './context/auth-context.ts';
 import { PageName, Paths } from './helpers/paths.ts';
 import './index.css';
 import { EditorPage } from './pages/EditorPage.tsx';
@@ -11,7 +10,8 @@ import { LoginPage } from './pages/LoginPage.tsx';
 import { ProfilePage } from './pages/ProfilePage.tsx';
 import { RegisterPage } from './pages/RegisterPage.tsx';
 import { SettingsPage } from './pages/SettingsPage.tsx';
-import { store } from './store/store.ts';
+import React from 'react';
+import { Config } from './config/config.ts';
 
 const router = createBrowserRouter([
   {
@@ -41,10 +41,16 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const app = Config.devMode ? (
   <React.StrictMode>
-    <Provider store={store}>
+    <AuthContext.Provider value={defaultAuth}>
       <RouterProvider router={router}></RouterProvider>
-    </Provider>
-  </React.StrictMode>,
+    </AuthContext.Provider>
+  </React.StrictMode>
+) : (
+  <AuthContext.Provider value={defaultAuth}>
+    <RouterProvider router={router}></RouterProvider>
+  </AuthContext.Provider>
 );
+
+ReactDOM.createRoot(document.getElementById('root')!).render(app);

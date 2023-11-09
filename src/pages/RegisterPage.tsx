@@ -1,12 +1,11 @@
-import { Link } from 'react-router-dom';
-import { Footer } from '../components/Footer';
-import { Header } from '../components/Header';
-import { PageName, Paths } from '../helpers/paths';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ApiClient } from '../api/api-client';
 import { SignUpBody } from '../api/types';
-import { ErrorObject } from '../shared/types';
 import { ErrorList } from '../components/ErrorList';
+import { PageName, Paths } from '../helpers/paths';
+import { ErrorObject } from '../shared/types';
+import { BasePage } from './BasePage';
 
 export function RegisterPage() {
   const [errors, setErrors] = useState<ErrorObject | null>(null);
@@ -36,69 +35,65 @@ export function RegisterPage() {
     }
   }
 
-  return (
-    <div id="sign-up-page">
-      <Header />
-      <div className="auth-page">
-        <div className="container page">
-          <div className="col-md-6 offset-md-3 col-xs-12">
-            <h1 className="text-xs-center">Sign up</h1>
+  const registerPage = (
+    <div className="container page">
+      <div className="col-md-6 offset-md-3 col-xs-12">
+        <h1 className="text-xs-center">Sign up</h1>
 
-            <p className="text-xs-center">
-              <Link to={Paths[PageName.Login]}>
-                {userCreated ? 'Go to login page' : 'Have an account?'}
-              </Link>
-            </p>
+        <p className="text-xs-center">
+          <Link to={Paths[PageName.Login]}>
+            {userCreated ? 'Go to login page' : 'Have an account?'}
+          </Link>
+        </p>
 
-            <ErrorList errors={errors} />
+        <ErrorList errors={errors} />
 
-            {userCreated ? (
-              <p className="text-xs-center">User successfully created!</p>
-            ) : (
-              <form onSubmit={handleSubmit}>
-                <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => {
-                      setUsername(e.target.value);
-                      setErrors(null);
-                    }}
-                  />
-                </fieldset>
-                <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="text"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setErrors(null);
-                    }}
-                  />
-                </fieldset>
-                <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setErrors(null);
-                    }}
-                  />
-                </fieldset>
-                <button className="btn btn-lg btn-primary pull-xs-right">Sign up</button>
-              </form>
-            )}
-          </div>
-        </div>
+        {userCreated ? (
+          <p className="text-xs-center">User successfully created!</p>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <fieldset className="form-group">
+              <input
+                className="form-control form-control-lg"
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setErrors(null);
+                }}
+              />
+            </fieldset>
+            <fieldset className="form-group">
+              <input
+                className="form-control form-control-lg"
+                type="text"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrors(null);
+                }}
+              />
+            </fieldset>
+            <fieldset className="form-group">
+              <input
+                className="form-control form-control-lg"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrors(null);
+                }}
+              />
+            </fieldset>
+            <button className="btn btn-lg btn-primary pull-xs-right">Sign up</button>
+          </form>
+        )}
       </div>
-      <Footer />
     </div>
   );
+
+  return <BasePage pageClass="auth-page" children={registerPage} />;
 }

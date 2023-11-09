@@ -1,12 +1,5 @@
-import { Footer } from '../components/Footer';
-import { Header } from '../components/Header';
+import { BasePage } from './BasePage';
 
 export function EditorPage() {
-  return (
-    <>
-      <Header />
-      <p>Editor page placeholder</p>
-      <Footer />
-    </>
-  );
+  return <BasePage pageClass="editor-page" children={<p>Editor page placeholder</p>} />;
 }

@@ -1,8 +1,13 @@
 import { Config } from '../config/config';
-import { SignInRequest, SignUpRequest } from './types';
+import { AuthHeader, SignInRequest, SignUpRequest } from './types';
 
 export class ApiClient {
-  static apiUrl = Config.apiUrl + '/api';
+  static apiUrl = Config.apiUrl;
+  static getAuthHeader = (token: string) => {
+    return {
+      Authorization: `Token ${token}`,
+    };
+  };
 
   static defaultHeaders = {
     'Content-Type': 'application/json',
@@ -21,6 +26,15 @@ export class ApiClient {
       method: 'POST',
       headers: this.defaultHeaders,
       body: JSON.stringify(options),
+    });
+  }
+
+  static async userProfile(authHeader: AuthHeader): Promise<Response> {
+    const auth = this.getAuthHeader(authHeader.token);
+
+    return fetch(this.apiUrl + '/user', {
+      method: 'GET',
+      headers: { ...this.defaultHeaders, ...auth },
     });
   }
 }

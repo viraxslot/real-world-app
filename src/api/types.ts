@@ -1,5 +1,9 @@
 import { ErrorObject } from '../shared/types';
 
+export type AuthHeader = {
+  token: string;
+};
+
 export type ApiError = {
   errors?: ErrorObject;
 };
@@ -30,3 +34,4 @@ export type SignInRequest = {
 };
 
 export type SignInBody = SignUpBody;
+export type UserProfileBody = SignUpBody;

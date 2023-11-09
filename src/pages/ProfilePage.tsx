@@ -1,12 +1,5 @@
-import { Footer } from '../components/Footer';
-import { Header } from '../components/Header';
+import { BasePage } from './BasePage';
 
 export function ProfilePage() {
-  return (
-    <>
-      <Header />
-      <p>Profile page placeholder</p>
-      <Footer />
-    </>
-  );
+  return <BasePage pageClass="profile-page" children={<p>Profile page placeholder</p>} />;
 }

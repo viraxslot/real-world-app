@@ -1,12 +1,5 @@
-import { Footer } from '../components/Footer';
-import { Header } from '../components/Header';
+import { BasePage } from './BasePage';
 
 export function SettingsPage() {
-  return (
-    <>
-      <Header />
-      <p>Settings page placeholder</p>
-      <Footer />
-    </>
-  );
+  return <BasePage pageClass="settings-page" children={<p>Settings page placeholder</p>} />;
 }
