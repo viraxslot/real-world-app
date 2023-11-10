@@ -52,11 +52,17 @@ export function LoginPage() {
       setErrors([ClientErrors.invalidCredentials]);
     } else {
       setErrors(null);
-      setAuth({
-        isAuthenticated: true,
-        username: body?.user?.username,
+      setAuth(() => {
+        return {
+          isAuthenticated: true,
+          username: body?.user?.username,
+        };
       });
-      Cookies.set(CookieNames.authToken, body?.user?.token, { expires: 1 });
+      Cookies.set(CookieNames.authToken, body?.user?.token, {
+        expires: 1,
+        secure: true,
+        sameSite: 'strict',
+      });
     }
   }
 
@@ -67,7 +73,7 @@ export function LoginPage() {
           <h1 className="text-xs-center">Sign in</h1>
 
           <p className="text-xs-center">
-            <Link to={Paths[PageName.Home]}>Go to home page</Link>
+            <Link to={Paths[PageName.Register]}>Need an account?</Link>
           </p>
 
           <ErrorList errors={errors} />

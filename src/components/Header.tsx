@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { ReactNode, useContext, useEffect } from 'react';
+import { ReactNode, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../context/auth-context';
 import { defaultAuth } from '../context/auth-data';
@@ -30,11 +30,11 @@ export function Header() {
   const { isAuthenticated, username, setAuth } = useContext(AuthContext);
 
   function handleLogout() {
-    setAuth({ ...defaultAuth });
+    setAuth(() => {
+      return { ...defaultAuth };
+    });
     Cookies.remove(CookieNames.authToken);
   }
-
-  useEffect(() => {}, [isAuthenticated]);
 
   return (
     <nav className="navbar navbar-light">

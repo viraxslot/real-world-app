@@ -13,7 +13,7 @@ export type BasePageProps = {
 };
 
 export function BasePage({ pageClass, children }: BasePageProps) {
-  const { setAuth } = useContext(AuthContext);
+  const { isAuthenticated, setAuth } = useContext(AuthContext);
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -27,9 +27,11 @@ export function BasePage({ pageClass, children }: BasePageProps) {
         if (response.ok) {
           const body: UserProfileBody = await response.json();
 
-          setAuth({
-            isAuthenticated: true,
-            username: body?.user?.username,
+          setAuth(() => {
+            return {
+              isAuthenticated: true,
+              username: body?.user?.username,
+            };
           });
         }
       } catch (err) {
@@ -38,7 +40,7 @@ export function BasePage({ pageClass, children }: BasePageProps) {
     };
 
     getUserProfile();
-  });
+  }, [isAuthenticated, setAuth]);
 
   return (
     <div className={pageClass}>
