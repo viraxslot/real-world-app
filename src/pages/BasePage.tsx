@@ -1,11 +1,11 @@
 import Cookies from 'js-cookie';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 import { ApiClient } from '../api/api-client';
+import { UserProfileBody } from '../api/types';
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
+import AuthContext from '../context/auth-context';
 import { CookieNames } from '../shared/constants';
-import { AuthContext, AuthContextProps, defaultAuth } from '../context/auth-context';
-import { UserProfileBody } from '../api/types';
 
 export type BasePageProps = {
   pageClass: string;
@@ -13,7 +13,7 @@ export type BasePageProps = {
 };
 
 export function BasePage({ pageClass, children }: BasePageProps) {
-  const [auth, setAuth] = useState<AuthContextProps>(defaultAuth);
+  const { setAuth } = useContext(AuthContext);
 
   useEffect(() => {
     console.log('base page: use effect');
@@ -40,15 +40,13 @@ export function BasePage({ pageClass, children }: BasePageProps) {
     };
 
     getUserProfile();
-  }, []);
+  });
 
   return (
-    <AuthContext.Provider value={auth}>
-      <div className={pageClass}>
-        <Header />
-        {children}
-        <Footer />
-      </div>
-    </AuthContext.Provider>
+    <div className={pageClass}>
+      <Header />
+      {children}
+      <Footer />
+    </div>
   );
 }

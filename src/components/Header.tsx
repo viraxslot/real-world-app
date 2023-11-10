@@ -1,6 +1,6 @@
 import { ReactNode, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import { AuthContext } from '../context/auth-context';
+import AuthContext from '../context/auth-context';
 import { PageName, Paths } from '../helpers/paths';
 
 type HeaderItemProps = {

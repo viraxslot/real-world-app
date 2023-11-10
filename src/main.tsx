@@ -1,6 +1,8 @@
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { AuthContext, defaultAuth } from './context/auth-context.ts';
+import { Config } from './config/config.ts';
+import { AuthProvider } from './context/auth-context.tsx';
 import { PageName, Paths } from './helpers/paths.ts';
 import './index.css';
 import { EditorPage } from './pages/EditorPage.tsx';
@@ -10,8 +12,6 @@ import { LoginPage } from './pages/LoginPage.tsx';
 import { ProfilePage } from './pages/ProfilePage.tsx';
 import { RegisterPage } from './pages/RegisterPage.tsx';
 import { SettingsPage } from './pages/SettingsPage.tsx';
-import React from 'react';
-import { Config } from './config/config.ts';
 
 const router = createBrowserRouter([
   {
@@ -41,16 +41,14 @@ const router = createBrowserRouter([
   },
 ]);
 
-const app = Config.devMode ? (
-  <React.StrictMode>
-    <AuthContext.Provider value={defaultAuth}>
+const root = (
+  <>
+    <AuthProvider>
       <RouterProvider router={router}></RouterProvider>
-    </AuthContext.Provider>
-  </React.StrictMode>
-) : (
-  <AuthContext.Provider value={defaultAuth}>
-    <RouterProvider router={router}></RouterProvider>
-  </AuthContext.Provider>
+    </AuthProvider>
+  </>
 );
+
+const app = Config.devMode ? <React.StrictMode>{root}</React.StrictMode> : root;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(app);
