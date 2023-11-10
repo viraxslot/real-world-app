@@ -1,7 +1,10 @@
-import { ReactNode, useContext } from 'react';
+import Cookies from 'js-cookie';
+import { ReactNode, useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../context/auth-context';
+import { defaultAuth } from '../context/auth-data';
 import { PageName, Paths } from '../helpers/paths';
+import { CookieNames } from '../shared/constants';
 
 type HeaderItemProps = {
   link: string;
@@ -24,8 +27,14 @@ function HeaderItem({ link, children }: HeaderItemProps) {
 }
 
 export function Header() {
-  const auth = useContext(AuthContext);
-  console.log(`Header: ${auth.isAuthenticated}, ${auth.username}`);
+  const { isAuthenticated, username, setAuth } = useContext(AuthContext);
+
+  function handleLogout() {
+    setAuth({ ...defaultAuth });
+    Cookies.remove(CookieNames.authToken);
+  }
+
+  useEffect(() => {}, [isAuthenticated]);
 
   return (
     <nav className="navbar navbar-light">
@@ -35,7 +44,7 @@ export function Header() {
         </a>
         <ul className="nav navbar-nav pull-xs-right">
           <HeaderItem link={Paths[PageName.Home]} children={PageName.Home} />
-          {auth.isAuthenticated ? (
+          {isAuthenticated ? (
             <>
               <HeaderItem
                 link={Paths[PageName.Editor]}
@@ -55,11 +64,11 @@ export function Header() {
                 }
               />
               <HeaderItem
-                link={Paths[PageName.Profile](auth.username as string)}
+                link={Paths[PageName.Profile](username as string)}
                 children={
                   <>
                     <img src="" className="user-pic" />
-                    {auth.username}
+                    {username}
                   </>
                 }
               />
@@ -69,6 +78,11 @@ export function Header() {
               <HeaderItem link={Paths[PageName.Login]} children={PageName.Login} />
               <HeaderItem link={Paths[PageName.Register]} children={PageName.Register} />
             </>
+          )}
+          {isAuthenticated && (
+            <button className="nav-item btn" onClick={handleLogout}>
+              Logout
+            </button>
           )}
         </ul>
       </div>

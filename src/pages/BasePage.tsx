@@ -16,7 +16,6 @@ export function BasePage({ pageClass, children }: BasePageProps) {
   const { setAuth } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log('base page: use effect');
     const getUserProfile = async () => {
       const token = Cookies.get(CookieNames.authToken) ?? '';
       if (!token) {
@@ -27,7 +26,6 @@ export function BasePage({ pageClass, children }: BasePageProps) {
         const response = await ApiClient.userProfile({ token });
         if (response.ok) {
           const body: UserProfileBody = await response.json();
-          console.log('current user', body.user.username);
 
           setAuth({
             isAuthenticated: true,
