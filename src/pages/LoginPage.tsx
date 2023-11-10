@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, redirect } from 'react-router-dom';
 import { ApiClient } from '../api/api-client';
 import { SignInBody } from '../api/types';
-import { ErrorList } from '../components/ErrorList';
+import { ErrorList } from '../components/ErrorList/ErrorList';
 import { AuthContext, AuthContextProps, defaultAuth } from '../context/auth-context';
 import { PageName, Paths } from '../helpers/paths';
 import { BasePage } from './BasePage';

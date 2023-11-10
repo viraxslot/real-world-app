@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ApiClient } from '../api/api-client';
 import { SignUpBody } from '../api/types';
-import { ErrorList } from '../components/ErrorList';
+import { ErrorList } from '../components/ErrorList/ErrorList';
 import { PageName, Paths } from '../helpers/paths';
 import { BasePage } from './BasePage';
 
