@@ -1,21 +1,22 @@
-import { ErrorObject } from '../shared/types';
+import { ReactNode } from 'react';
 
-export type ErrorListProps = {
-  errors: ErrorObject | null;
-};
+type ErrorListProps = { errors: string[] | { body: string[] } | null };
 
 export function ErrorList({ errors }: ErrorListProps) {
-  if (!errors) {
+  if (!errors || (Array.isArray(errors) && errors.length === 0)) {
     return;
   }
 
-  return Object.keys(errors).length > 0 ? (
-    <ul className="error-messages">
-      {Object.keys(errors).map((idx, key) => (
-        <li key={idx}>
-          {key} {errors[key][0]}
-        </li>
-      ))}
-    </ul>
-  ) : null;
+  let errorItems: ReactNode = '';
+  if (Array.isArray(errors)) {
+    errorItems = errors.map((error, idx) => <li key={idx}>{error}</li>);
+  } else {
+    try {
+      errorItems = errors?.body.map((error, idx) => <li key={idx}>{error}</li>);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  return <ul className="error-messages">{errorItems}</ul>;
 }

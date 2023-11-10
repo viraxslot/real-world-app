@@ -5,16 +5,20 @@ import { SignInBody } from '../api/types';
 import { ErrorList } from '../components/ErrorList';
 import { AuthContext, AuthContextProps, defaultAuth } from '../context/auth-context';
 import { PageName, Paths } from '../helpers/paths';
-import { ErrorObject } from '../shared/types';
 import { BasePage } from './BasePage';
 import Cookies from 'js-cookie';
 import { CookieNames } from '../shared/constants';
+import { ClientErrors } from '../shared/client-errors';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<ErrorObject | null>(null);
+  const [errors, setErrors] = useState<string[] | null>(null);
   const [auth, setAuth] = useState<AuthContextProps>(defaultAuth);
+
+  useEffect(() => {
+    setErrors(null);
+  }, [email, password]);
 
   useEffect(() => {
     console.log('login page: use effect, auth status:', auth.isAuthenticated);
@@ -24,9 +28,7 @@ export function LoginPage() {
   }, [auth.isAuthenticated]);
 
   async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
-    console.log('login page: sign in');
     event.preventDefault();
-
     const response = await ApiClient.signIn({
       user: {
         email,
@@ -34,13 +36,19 @@ export function LoginPage() {
       },
     });
 
-    const body: SignInBody = await response.json();
-    if (body?.errors) {
-      setErrors(body.errors);
+    let body: SignInBody = {} as SignInBody;
+    try {
+      body = await response.json();
+    } catch (err) {
+      console.error(err);
     }
 
-    if (response.ok && !body.errors) {
-      console.log('login page: set state and cookie');
+    if (!response.ok) {
+      if (body?.errors) {
+        setErrors(body.errors);
+      }
+      setErrors([ClientErrors.invalidCredentials]);
+    } else {
       setErrors(null);
       setAuth({
         isAuthenticated: true,
@@ -79,10 +87,7 @@ export function LoginPage() {
                     type="text"
                     placeholder="Email"
                     value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setErrors(null);
-                    }}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </fieldset>
                 <fieldset className="form-group">
@@ -91,10 +96,7 @@ export function LoginPage() {
                     type="password"
                     placeholder="Password"
                     value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setErrors(null);
-                    }}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </fieldset>
                 <button className="btn btn-lg btn-primary pull-xs-right">Sign in</button>

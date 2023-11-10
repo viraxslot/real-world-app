@@ -1,11 +1,9 @@
-import { ErrorObject } from '../shared/types';
-
 export type AuthHeader = {
   token: string;
 };
 
 export type ApiError = {
-  errors?: ErrorObject;
+  errors: string[];
 };
 
 export type SignUpRequest = {
