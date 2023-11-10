@@ -1,19 +1,6 @@
-import { Dispatch, ReactNode, SetStateAction, createContext, useState } from 'react';
-import { defaultUsername } from '../shared/constants';
-
-export type AuthState = {
-  isAuthenticated: boolean;
-  username: string;
-};
-
-export type AuthContextProps = AuthState & {
-  setAuth: Dispatch<SetStateAction<AuthState>>;
-};
-
-export const defaultAuth = {
-  isAuthenticated: false,
-  username: defaultUsername,
-};
+import { ReactNode, createContext, useState } from 'react';
+import { defaultAuth } from './auth-data';
+import { AuthContextProps, AuthState } from './types';
 
 const AuthContext = createContext<AuthContextProps>({ ...defaultAuth, setAuth: () => {} });
 
