@@ -1,0 +1,25 @@
+name: Setup node and install dependencies
+description: Setup nodejs, install yarn dependencies
+
+runs:
+  using: "composite"
+  steps:
+    - name: Read node version from file
+      id: node_version
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: "./.github/workflows/node-version"
+
+    - name: Selected node version
+      shell: bash
+      run: echo "${{ steps.node_version.outputs.content }}"
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "${{ steps.node_version.outputs.content }}"
+        cache: "yarn"
+
+    - name: Install app dependencies
+      if: always()
+      shell: bash
+      run: yarn install --frozen-lockfile
