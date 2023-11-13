@@ -23,7 +23,7 @@ export function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(Paths[PageName.Home]);
+      navigate(Paths[PageName.Home], { replace: true });
     }
     setEmail('');
     setPassword('');
