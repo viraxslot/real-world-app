@@ -4,7 +4,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Config } from './config/config.ts';
 import { AuthProvider } from './context/auth-context.tsx';
 import { PageName, Paths } from './helpers/paths.ts';
-import './index.css';
+import './main.css';
 import { EditorPage } from './pages/EditorPage.tsx';
 import { ErrorPage } from './pages/ErrorPage.tsx';
 import { HomePage } from './pages/HomePage.tsx';
