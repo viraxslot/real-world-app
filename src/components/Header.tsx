@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { PageName, Paths } from '../helpers/paths';
+import { clsx } from 'clsx';
 
 const pages = [PageName.Home, PageName.Login, PageName.Register];
 
@@ -17,7 +18,7 @@ export function Header() {
                 <NavLink
                   to={Paths[page]}
                   className={({ isActive, isPending }) =>
-                    `nav-link ${isPending ? 'pending' : isActive ? 'active' : ''}`
+                    clsx('nav-link', isPending && 'pending', isActive && 'active')
                   }
                 >
                   {page}
