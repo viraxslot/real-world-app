@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { ErrorList, ErrorListProps } from './ErrorList';
-import { ERROR_LIST_LOCATORS } from './ErrorListLocators';
+import { ERROR_LIST_LOCATORS } from './ErrorList.locators';
 
 const mount = ({ errors }: ErrorListProps) => {
   render(<ErrorList errors={errors} />);

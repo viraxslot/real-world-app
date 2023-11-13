@@ -10,7 +10,7 @@ import { ErrorPage } from './pages/ErrorPage.tsx';
 import { HomePage } from './pages/HomePage.tsx';
 import { LoginPage } from './pages/LoginPage.tsx';
 import { ProfilePage } from './pages/ProfilePage.tsx';
-import { RegisterPage } from './pages/RegisterPage.tsx';
+import { RegisterPage } from './pages/RegisterPage/RegisterPage.tsx';
 import { SettingsPage } from './pages/SettingsPage.tsx';
 import { Layout } from './pages/Layout.tsx';
 

@@ -22,5 +22,13 @@ module.exports = {
         'react-refresh/only-export-components': 'off',
       },
     },
+    {
+      files: ['e2e/**/*.ts'],
+      rules: {
+        '@typescript-eslint/promise-function-async': 'error',
+        '@typescript-eslint/no-floating-promises': 'error',
+        '@typescript-eslint/no-misused-promises': 'error',
+      },
+    },
   ],
 };

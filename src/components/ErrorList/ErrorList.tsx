@@ -1,4 +1,4 @@
-import { ERROR_LIST_LOCATORS } from './ErrorListLocators';
+import { ERROR_LIST_LOCATORS } from './ErrorList.locators';
 
 export type ErrorListProps = { errors: string[] | { body: string[] } | null };
 

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./e2e",
+    "noEmit": true,
+
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strictFunctionTypes": false,
+    "noImplicitAny": true,
+    "allowJs": true,
+    "target": "es2021",
+    "types": ["node"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["."],
+  "exclude": ["node_modules"]
+}
