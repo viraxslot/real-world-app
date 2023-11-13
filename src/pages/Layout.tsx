@@ -14,7 +14,7 @@ export function Layout() {
   useEffect(() => {
     const getUserProfile = async () => {
       const token = Cookies.get(CookieNames.authToken) ?? '';
-      if (!token) {
+      if (!token || !isAuthenticated) {
         return;
       }
 
