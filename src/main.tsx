@@ -12,32 +12,38 @@ import { LoginPage } from './pages/LoginPage.tsx';
 import { ProfilePage } from './pages/ProfilePage.tsx';
 import { RegisterPage } from './pages/RegisterPage.tsx';
 import { SettingsPage } from './pages/SettingsPage.tsx';
+import { Layout } from './pages/Layout.tsx';
 
 const router = createBrowserRouter([
   {
-    path: Paths[PageName.Home],
-    element: <HomePage />,
+    element: <Layout />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: Paths[PageName.Login],
-    element: <LoginPage />,
-  },
-  {
-    path: Paths[PageName.Register],
-    element: <RegisterPage />,
-  },
-  {
-    path: Paths[PageName.Editor],
-    element: <EditorPage />,
-  },
-  {
-    path: Paths[PageName.Settings],
-    element: <SettingsPage />,
-  },
-  {
-    path: Paths[PageName.Profile](),
-    element: <ProfilePage />,
+    children: [
+      {
+        path: Paths[PageName.Home],
+        element: <HomePage />,
+      },
+      {
+        path: Paths[PageName.Login],
+        element: <LoginPage />,
+      },
+      {
+        path: Paths[PageName.Register],
+        element: <RegisterPage />,
+      },
+      {
+        path: Paths[PageName.Editor],
+        element: <EditorPage />,
+      },
+      {
+        path: Paths[PageName.Settings],
+        element: <SettingsPage />,
+      },
+      {
+        path: Paths[PageName.Profile](),
+        element: <ProfilePage />,
+      },
+    ],
   },
 ]);
 

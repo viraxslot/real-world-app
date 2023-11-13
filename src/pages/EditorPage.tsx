@@ -1,5 +1,7 @@
-import { BasePage } from './BasePage';
-
 export function EditorPage() {
-  return <BasePage pageClass="editor-page" children={<p>Editor page placeholder</p>} />;
+  return (
+    <div className="editor-page">
+      <p>Editor page placeholder</p>
+    </div>
+  );
 }

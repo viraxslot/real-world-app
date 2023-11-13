@@ -1,5 +1,7 @@
-import { BasePage } from './BasePage';
-
 export function SettingsPage() {
-  return <BasePage pageClass="settings-page" children={<p>Settings page placeholder</p>} />;
+  return (
+    <div className="settings-page">
+      <p>Settings page placeholder</p>
+    </div>
+  );
 }

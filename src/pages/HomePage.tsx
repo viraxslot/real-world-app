@@ -1,5 +1,7 @@
-import { BasePage } from './BasePage';
-
 export function HomePage() {
-  return <BasePage pageClass="home-page" children={<p>Home page placeholder</p>} />;
+  return (
+    <div className="home-page">
+      <p>Home page placeholder</p>
+    </div>
+  );
 }
