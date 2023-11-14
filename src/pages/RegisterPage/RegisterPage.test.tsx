@@ -4,21 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { ERROR_LIST_LOCATORS } from '../../components/ErrorList/ErrorList.locators';
 import { RegisterPage } from './RegisterPage';
 import { REGISTER_PAGE_LOCATORS } from './RegisterPage.locators';
-
-const mockFetch = ({ ok, data }: { ok: boolean; data: Record<string, unknown> }) => {
-  return jest.fn().mockImplementationOnce(
-    () =>
-      new Promise((resolve) => {
-        resolve({
-          ok,
-          json: () =>
-            new Promise((resolve) => {
-              resolve(data);
-            }),
-        });
-      }),
-  );
-};
+import { mockFetchOnce } from '../../helpers/test.helper';
 
 const mount = () => {
   render(
@@ -45,7 +31,7 @@ describe('Register page', () => {
 
   it('shows errors from the backend', async () => {
     const errorMessage = 'error message';
-    global.fetch = mockFetch({
+    global.fetch = mockFetchOnce({
       ok: false,
       data: {
         errors: [errorMessage],
@@ -62,7 +48,7 @@ describe('Register page', () => {
   });
 
   it('shows success message if user created', async () => {
-    global.fetch = mockFetch({
+    global.fetch = mockFetchOnce({
       ok: true,
       data: {
         user: {
@@ -101,7 +87,7 @@ describe('Register page', () => {
   ];
   elements.forEach((element) => {
     it(`clears error messages on user input to ${element.title} field`, async () => {
-      global.fetch = mockFetch({
+      global.fetch = mockFetchOnce({
         ok: false,
         data: {
           errors: ['test error'],

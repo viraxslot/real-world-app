@@ -1,3 +1,3 @@
 export const ClientErrors = {
-  invalidCredentials: 'invalid username or password',
+  unableToLogin: 'unexpected error, unable to login',
 };

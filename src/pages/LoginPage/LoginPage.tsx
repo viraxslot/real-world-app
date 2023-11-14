@@ -8,6 +8,7 @@ import AuthContext from '../../context/auth-context';
 import { PageName, Paths } from '../../helpers/paths';
 import { ClientErrors } from '../../shared/client-errors';
 import { CookieNames } from '../../shared/constants';
+import { LOGIN_PAGE_LOCATORS } from './LoginPage.locators';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -47,8 +48,9 @@ export function LoginPage() {
     if (!response.ok) {
       if (body?.errors) {
         setErrors(body.errors);
+      } else {
+        setErrors([ClientErrors.unableToLogin]);
       }
-      setErrors([ClientErrors.invalidCredentials]);
     } else {
       setErrors(null);
       setAuth(() => {
@@ -70,10 +72,14 @@ export function LoginPage() {
       <div className="container page">
         <div className="row">
           <div className="col-md-6 offset-md-3 col-xs-12">
-            <h1 className="text-xs-center">Sign in</h1>
+            <h1 className="text-xs-center" data-testid={LOGIN_PAGE_LOCATORS.title}>
+              Sign in
+            </h1>
 
             <p className="text-xs-center">
-              <Link to={Paths[PageName.Register]}>Need an account?</Link>
+              <Link to={Paths[PageName.Register]} data-testid={LOGIN_PAGE_LOCATORS.registerLink}>
+                Need an account?
+              </Link>
             </p>
 
             <ErrorList errors={errors} />
@@ -86,6 +92,7 @@ export function LoginPage() {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  data-testid={LOGIN_PAGE_LOCATORS.email}
                 />
               </fieldset>
               <fieldset className="form-group">
@@ -95,9 +102,15 @@ export function LoginPage() {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  data-testid={LOGIN_PAGE_LOCATORS.password}
                 />
               </fieldset>
-              <button className="btn btn-lg btn-primary pull-xs-right">Sign in</button>
+              <button
+                className="btn btn-lg btn-primary pull-xs-right"
+                data-testid={LOGIN_PAGE_LOCATORS.signIn}
+              >
+                Sign in
+              </button>
             </form>
           </div>
         </div>
