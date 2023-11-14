@@ -5,14 +5,14 @@ import { Config } from './config/config.ts';
 import { AuthProvider } from './context/auth-context.tsx';
 import { PageName, Paths } from './helpers/paths.ts';
 import './main.css';
-import { EditorPage } from './pages/EditorPage.tsx';
-import { ErrorPage } from './pages/ErrorPage.tsx';
-import { HomePage } from './pages/HomePage.tsx';
-import { LoginPage } from './pages/LoginPage.tsx';
-import { ProfilePage } from './pages/ProfilePage.tsx';
+import { EditorPage } from './pages/EditorPage/EditorPage.tsx';
+import { ErrorPage } from './pages/ErrorPage/ErrorPage.tsx';
+import { HomePage } from './pages/HomePage/HomePage.tsx';
+import { LoginPage } from './pages/LoginPage/LoginPage.tsx';
+import { ProfilePage } from './pages/ProfilePage/ProfilePage.tsx';
 import { RegisterPage } from './pages/RegisterPage/RegisterPage.tsx';
-import { SettingsPage } from './pages/SettingsPage.tsx';
-import { Layout } from './pages/Layout.tsx';
+import { SettingsPage } from './pages/SettingsPage/SettingsPage.tsx';
+import { Layout } from './pages/Layout/Layout.tsx';
 
 export const router = createBrowserRouter([
   {

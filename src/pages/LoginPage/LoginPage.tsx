@@ -1,13 +1,13 @@
 import Cookies from 'js-cookie';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ApiClient } from '../api/api-client';
-import { SignInBody } from '../api/types';
-import { ErrorList } from '../components/ErrorList/ErrorList';
-import AuthContext from '../context/auth-context';
-import { PageName, Paths } from '../helpers/paths';
-import { ClientErrors } from '../shared/client-errors';
-import { CookieNames } from '../shared/constants';
+import { ApiClient } from '../../api/api-client';
+import { SignInBody } from '../../api/types';
+import { ErrorList } from '../../components/ErrorList/ErrorList';
+import AuthContext from '../../context/auth-context';
+import { PageName, Paths } from '../../helpers/paths';
+import { ClientErrors } from '../../shared/client-errors';
+import { CookieNames } from '../../shared/constants';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
