@@ -14,7 +14,7 @@ import { RegisterPage } from './pages/RegisterPage/RegisterPage.tsx';
 import { SettingsPage } from './pages/SettingsPage.tsx';
 import { Layout } from './pages/Layout.tsx';
 
-const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     element: <Layout />,
     errorElement: <ErrorPage />,

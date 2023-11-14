@@ -4,4 +4,5 @@ export default {
   testMatch: ['<rootDir>/src/**/*test.{ts,tsx}'],
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
+  collectCoverageFrom: ['<rootDir>/src/**/*.{ts,tsx}', '!<rootDir>/src/config/**'],
 };

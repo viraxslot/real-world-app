@@ -1,17 +1,19 @@
 import Cookies from 'js-cookie';
 import { ReactNode, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import AuthContext from '../context/auth-context';
-import { defaultAuth } from '../context/auth-data';
-import { PageName, Paths } from '../helpers/paths';
-import { CookieNames } from '../shared/constants';
+import AuthContext from '../../context/auth-context';
+import { defaultAuth } from '../../context/auth-data';
+import { PageName, Paths } from '../../helpers/paths';
+import { CookieNames } from '../../shared/constants';
+import { HEADER_LOCATORS } from './Header.locators';
 
 type HeaderItemProps = {
   link: string;
   children: ReactNode;
+  dataTestId: string;
 };
 
-function HeaderItem({ link, children }: HeaderItemProps) {
+function HeaderItem({ link, children, dataTestId }: HeaderItemProps) {
   return (
     <li className="nav-item">
       <NavLink
@@ -19,6 +21,7 @@ function HeaderItem({ link, children }: HeaderItemProps) {
         className={({ isActive, isPending }) =>
           `nav-link ${isPending ? 'pending' : isActive ? 'active' : ''}`
         }
+        data-testid={dataTestId}
       >
         {children}
       </NavLink>
@@ -39,11 +42,19 @@ export function Header() {
   return (
     <nav className="navbar navbar-light">
       <div className="container">
-        <a className="navbar-brand" href="/">
+        <NavLink
+          className="navbar-brand"
+          to={Paths[PageName.Home]}
+          data-testid={HEADER_LOCATORS.siteLink}
+        >
           conduit
-        </a>
+        </NavLink>
         <ul className="nav navbar-nav pull-xs-right">
-          <HeaderItem link={Paths[PageName.Home]} children={PageName.Home} />
+          <HeaderItem
+            link={Paths[PageName.Home]}
+            children={PageName.Home}
+            dataTestId={HEADER_LOCATORS.homePage}
+          />
           {isAuthenticated ? (
             <>
               <HeaderItem
@@ -54,6 +65,7 @@ export function Header() {
                     &nbsp;{PageName.Editor}
                   </>
                 }
+                dataTestId={HEADER_LOCATORS.editorPage}
               />
               <HeaderItem
                 link={Paths[PageName.Settings]}
@@ -62,6 +74,7 @@ export function Header() {
                     <i className="ion-gear-a"></i>&nbsp;{PageName.Settings}
                   </>
                 }
+                dataTestId={HEADER_LOCATORS.settingsPage}
               />
               <HeaderItem
                 link={Paths[PageName.Profile](username as string)}
@@ -71,16 +84,29 @@ export function Header() {
                     {username}
                   </>
                 }
+                dataTestId={HEADER_LOCATORS.profilePage}
               />
             </>
           ) : (
             <>
-              <HeaderItem link={Paths[PageName.Login]} children={PageName.Login} />
-              <HeaderItem link={Paths[PageName.Register]} children={PageName.Register} />
+              <HeaderItem
+                link={Paths[PageName.Login]}
+                children={PageName.Login}
+                dataTestId={HEADER_LOCATORS.loginPage}
+              />
+              <HeaderItem
+                link={Paths[PageName.Register]}
+                children={PageName.Register}
+                dataTestId={HEADER_LOCATORS.registerPage}
+              />
             </>
           )}
           {isAuthenticated && (
-            <button className="nav-item btn" onClick={handleLogout}>
+            <button
+              className="nav-item btn"
+              onClick={handleLogout}
+              data-testid={HEADER_LOCATORS.logoutButon}
+            >
               Logout
             </button>
           )}

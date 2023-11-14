@@ -3,8 +3,8 @@ import { useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ApiClient } from '../api/api-client';
 import { UserProfileBody } from '../api/types';
-import { Footer } from '../components/Footer';
-import { Header } from '../components/Header';
+import { Footer } from '../components/Footer/Footer';
+import { Header } from '../components/Header/Header';
 import AuthContext from '../context/auth-context';
 import { CookieNames } from '../shared/constants';
 
