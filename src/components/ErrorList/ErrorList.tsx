@@ -10,21 +10,17 @@ export function ErrorList({ errors }: ErrorListProps) {
   let errorsList: string[] = [];
   if (Array.isArray(errors)) {
     errorsList = errors;
-  }
-
-  if (!Array.isArray(errors)) {
+  } else {
     errorsList = errors?.body ? errors.body : [];
   }
 
-  const errorItems = errorsList.map((error, idx) => (
-    <li key={idx} data-testid={ERROR_LIST_LOCATORS.errorItem}>
-      {error}
-    </li>
-  ));
-
   return (
     <ul className="error-messages" data-testid={ERROR_LIST_LOCATORS.itself}>
-      {errorItems}
+      {errorsList.map((error, idx) => (
+        <li key={idx} data-testid={ERROR_LIST_LOCATORS.errorItem}>
+          {error}
+        </li>
+      ))}
     </ul>
   );
 }
