@@ -6,4 +6,5 @@ dotenv.config({ path: envPath });
 
 export const TestConfig = {
   baseUrl: process.env.BASE_URL,
+  apiUrl: process.env.API_URL,
 };
