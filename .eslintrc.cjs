@@ -1,6 +1,10 @@
 module.exports = {
   root: true,
   env: { browser: true, es2020: true },
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: `./tsconfig.json`,
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -9,8 +13,13 @@ module.exports = {
     'plugin:jest-dom/recommended',
     'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parser: '@typescript-eslint/parser',
+  ignorePatterns: [
+    'dist',
+    '.eslintrc.cjs',
+    'vite.config.ts',
+    'setupTests.ts',
+    'playwright.config.ts',
+  ],
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],

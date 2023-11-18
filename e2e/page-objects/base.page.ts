@@ -36,6 +36,7 @@ export class BasePage {
   }
 
   getByRole(role: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return this.page.getByRole(role as any);
   }
 
@@ -45,8 +46,8 @@ export class BasePage {
    * @param title
    * @param body
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async testStep(title: string, body?: () => Promise<any>): Promise<any> {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return test.step(title, body ?? (async () => {}));
   }
 }
