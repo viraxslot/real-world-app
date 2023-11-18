@@ -61,34 +61,31 @@ describe('Header', () => {
   });
 
   const authUserNavLinks = [
-    {
-      name: 'home page',
-      locator: HEADER_LOCATORS.homePage,
-      text: 'Home',
-      link: '/'
-    },
+    { 
+      name: 'home page', 
+      locator: HEADER_LOCATORS.homePage, text: 'Home', link: '/' },
     {
       name: 'editor page',
       locator: HEADER_LOCATORS.editorPage,
       text: 'New Article',
-      link: '/editor'
+      link: '/editor',
     },
     {
       name: 'settings page',
       locator: HEADER_LOCATORS.settingsPage,
       text: 'Settings',
-      link: '/settings'
+      link: '/settings',
     },
     {
       name: 'profile page',
       locator: HEADER_LOCATORS.profilePage,
-      link: '/profile/test user'
+      link: '/profile/test user',
     },
     {
       name: 'logout button',
       locator: HEADER_LOCATORS.logoutButon,
       text: 'Logout',
-      link: null
+      link: null,
     },
   ];
 
@@ -104,7 +101,6 @@ describe('Header', () => {
 
       expect(screen.queryByTestId(HEADER_LOCATORS.loginPage)).not.toBeInTheDocument();
       expect(screen.queryByTestId(HEADER_LOCATORS.registerPage)).not.toBeInTheDocument();
-
     });
   });
 
