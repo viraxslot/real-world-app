@@ -61,9 +61,12 @@ describe('Header', () => {
   });
 
   const authUserNavLinks = [
-    { 
-      name: 'home page', 
-      locator: HEADER_LOCATORS.homePage, text: 'Home', link: '/' },
+    {
+      name: 'home page',
+      locator: HEADER_LOCATORS.homePage,
+      text: 'Home',
+      link: '/',
+    },
     {
       name: 'editor page',
       locator: HEADER_LOCATORS.editorPage,
