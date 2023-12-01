@@ -5,33 +5,54 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test": "vitest",
+    "test:nowatch": "vitest --run",
+    "test:staged": "vitest related --run",
+    "test:coverage": "vitest --coverage",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prettier:fix": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,html}\"",
     "prepare": "husky install",
-    "code:checks": "prettier --check src/ && yarn lint"
+    "code:checks": "prettier --check src/ && yarn lint && yarn test:nowatch",
+    "pw:run": "npx playwright test --config ./playwright.config.ts",
+    "pw:ui": "yarn pw:run --ui"
   },
   "dependencies": {
     "clsx": "^2.0.0",
+    "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.2.0",
+    "@playwright/test": "^1.40.1",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.1.0",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/dotenv": "^8.2.0",
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^20.9.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "@vitejs/plugin-react": "^4.0.3",
+    "@vitejs/plugin-react": "^4.2.0",
+    "@vitest/coverage-v8": "^0.34.6",
+    "dotenv": "^16.3.1",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-jest-dom": "^5.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "eslint-plugin-testing-library": "^6.1.2",
     "husky": "^8.0.3",
+    "jsdom": "^23.0.1",
     "lint-staged": "^15.0.2",
     "prettier": "^3.0.3",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^5.0.4",
+    "vitest": "^0.34.6"
   }
 }
