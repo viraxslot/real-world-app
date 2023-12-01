@@ -2,7 +2,6 @@ import Cookies from 'js-cookie';
 import { useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ApiClient } from '../../api/api-client';
-import { UserProfileBody } from '../../api/types';
 import { Footer } from '../../components/Footer/Footer';
 import { Header } from '../../components/Header/Header';
 import AuthContext from '../../context/auth-context';
@@ -19,17 +18,11 @@ export function Layout() {
       }
 
       try {
-        const response = await ApiClient.userProfile({ token });
-        if (response.ok) {
-          const body: UserProfileBody = await response.json();
-
-          setAuth(() => {
-            return {
-              isAuthenticated: true,
-              username: body?.user?.username,
-            };
-          });
-        }
+        const profileBody = await ApiClient.userProfile({ token });
+        setAuth({
+          isAuthenticated: true,
+          username: profileBody?.user?.username,
+        });
       } catch (err) {
         console.error(err);
       }

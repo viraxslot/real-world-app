@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ApiClient } from '../../api/api-client';
-import { SignUpBody } from '../../api/types';
 import { ErrorList } from '../../components/ErrorList/ErrorList';
 import { PageName, Paths } from '../../helpers/paths';
 import { REGISTER_PAGE_LOCATORS } from './RegisterPage.locators';
@@ -19,28 +18,20 @@ export function RegisterPage() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const response = await ApiClient.signUp({
-      user: {
-        username,
-        email,
-        password,
-      },
-    });
-
-    let body: SignUpBody = {} as SignUpBody;
     try {
-      body = await response.json();
-    } catch (err) {
-      console.error(err);
-    }
+      await ApiClient.signUp({
+        user: {
+          username,
+          email,
+          password,
+        },
+      });
 
-    if (body?.errors) {
-      setErrors(body.errors);
-    }
-
-    if (response.ok && !body?.errors) {
       setErrors(null);
       setUserCreated(true);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setErrors(err?.message.split('\n'));
     }
   }
 

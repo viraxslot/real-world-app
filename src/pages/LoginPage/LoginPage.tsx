@@ -2,11 +2,9 @@ import Cookies from 'js-cookie';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ApiClient } from '../../api/api-client';
-import { SignInBody } from '../../api/types';
 import { ErrorList } from '../../components/ErrorList/ErrorList';
 import AuthContext from '../../context/auth-context';
 import { PageName, Paths } from '../../helpers/paths';
-import { ClientErrors } from '../../shared/client-errors';
 import { CookieNames } from '../../shared/constants';
 import { LOGIN_PAGE_LOCATORS } from './LoginPage.locators';
 
@@ -31,39 +29,28 @@ export function LoginPage() {
 
   async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const response = await ApiClient.signIn({
-      user: {
-        email,
-        password,
-      },
-    });
 
-    let body: SignInBody = {} as SignInBody;
     try {
-      body = await response.json();
-    } catch (err) {
-      console.error(err);
-    }
-
-    if (!response.ok) {
-      if (body?.errors) {
-        setErrors(body.errors);
-      } else {
-        setErrors([ClientErrors.unableToLogin]);
-      }
-    } else {
-      setErrors(null);
-      setAuth(() => {
-        return {
-          isAuthenticated: true,
-          username: body?.user?.username,
-        };
+      const signInBody = await ApiClient.signIn({
+        user: {
+          email,
+          password,
+        },
       });
-      Cookies.set(CookieNames.authToken, body?.user?.token, {
+
+      setErrors(null);
+      setAuth({
+        isAuthenticated: true,
+        username: signInBody?.user?.username,
+      });
+      Cookies.set(CookieNames.authToken, signInBody?.user?.token, {
         expires: 1,
         secure: true,
         sameSite: 'strict',
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setErrors(err?.message.split('\n'));
     }
   }
 

@@ -23,6 +23,14 @@ test.describe('Login suite', () => {
     await expect(loginPage.navbar.logout).toBeVisible();
   });
 
+  test('should stay logged in after page reload', async ({ loginPage }) => {
+    await expect(loginPage.navbar.logout).toBeHidden();
+    await loginPage.signIn({ user });
+    await expect(loginPage.navbar.logout).toBeVisible();
+    await loginPage.page.reload();
+    await expect(loginPage.navbar.logout).toBeVisible();
+  });
+
   test('should show errors from the backend if no fields are filled', async ({ loginPage }) => {
     await loginPage.signInButton.click();
     await expect(loginPage.errorsList.itself).toBeVisible();

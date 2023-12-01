@@ -4,7 +4,7 @@ export type ErrorListProps = { errors: string[] | { body: string[] } | null };
 
 export function ErrorList({ errors }: ErrorListProps) {
   if (!errors || (Array.isArray(errors) && errors.length === 0)) {
-    return <></>;
+    return null;
   }
 
   let errorsList: string[] = [];

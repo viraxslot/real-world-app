@@ -6,6 +6,7 @@ import { defaultAuth } from '../../context/auth-data';
 import { PageName, Paths } from '../../helpers/paths';
 import { CookieNames } from '../../shared/constants';
 import { HEADER_LOCATORS } from './Header.locators';
+import clsx from 'clsx';
 
 type HeaderItemProps = {
   link: string;
@@ -19,7 +20,7 @@ function HeaderItem({ link, children, dataTestId }: HeaderItemProps) {
       <NavLink
         to={link}
         className={({ isActive, isPending }) =>
-          `nav-link ${isPending ? 'pending' : isActive ? 'active' : ''}`
+          clsx('nav-link', isPending && 'pending', isActive && 'active')
         }
         data-testid={dataTestId}
       >
@@ -33,9 +34,7 @@ export function Header() {
   const { isAuthenticated, username, setAuth } = useContext(AuthContext);
 
   function handleLogout() {
-    setAuth(() => {
-      return { ...defaultAuth };
-    });
+    setAuth({ ...defaultAuth });
     Cookies.remove(CookieNames.authToken);
   }
 

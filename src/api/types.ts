@@ -2,8 +2,8 @@ export type AuthHeader = {
   token: string;
 };
 
-export type ApiError = {
-  errors: string[];
+export type ErrorResponse = {
+  errors: string[] | { body: string[] };
 };
 
 export type SignUpRequest = {
@@ -14,7 +14,7 @@ export type SignUpRequest = {
   };
 };
 
-export type SignUpBody = ApiError & {
+export type SignUpResponseBody = ErrorResponse & {
   user: {
     email: string;
     username: string;
@@ -31,5 +31,5 @@ export type SignInRequest = {
   };
 };
 
-export type SignInBody = SignUpBody;
-export type UserProfileBody = SignUpBody;
+export type SignInResponseBody = SignUpResponseBody;
+export type UserProfileResponseBody = SignUpResponseBody;
