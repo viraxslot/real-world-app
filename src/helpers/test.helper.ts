@@ -1,5 +1,5 @@
 export const mockFetchOnce = ({ ok, data }: { ok: boolean; data: Record<string, unknown> }) => {
-  return jest.fn().mockImplementationOnce(
+  return vi.fn().mockImplementationOnce(
     () =>
       new Promise((resolve) => {
         resolve({

@@ -1,5 +1,7 @@
-import { configure } from '@testing-library/react';
-import { dataTestId } from './src/shared/constants';
-import '@testing-library/jest-dom/jest-globals';
+import { afterEach } from 'vitest';
+import { cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
 
-configure({ testIdAttribute: dataTestId });
+afterEach(() => {
+  cleanup();
+});

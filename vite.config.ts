@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -9,5 +10,11 @@ export default defineConfig({
     modules: {
       localsConvention: 'camelCaseOnly',
     },
+  },
+  test: {
+    include: ['./src/**/*test.{ts,tsx}'],
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './setupTests.ts',
   },
 });

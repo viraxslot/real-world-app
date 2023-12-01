@@ -108,7 +108,7 @@ describe('Header', () => {
   });
 
   it('changes state on logout button', async () => {
-    const setAuth = jest.fn();
+    const setAuth = vi.fn();
     mount({ isAuthenticated: true, username: 'test', setAuth });
     const user = userEvent.setup();
 
