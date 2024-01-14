@@ -4,9 +4,10 @@ import { ApiClient } from '../../api/api-client';
 import { ErrorList } from '../../components/ErrorList/ErrorList';
 import { PageName, Paths } from '../../helpers/paths';
 import { REGISTER_PAGE_LOCATORS } from './RegisterPage.locators';
+import { ValidationError } from '../../api/types';
 
 export function RegisterPage() {
-  const [errors, setErrors] = useState<string[] | null>(null);
+  const [errors, setErrors] = useState<string | null>(null);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,9 +30,10 @@ export function RegisterPage() {
 
       setErrors(null);
       setUserCreated(true);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setErrors(err?.message.split('\n'));
+    } catch (err) {
+      if (err instanceof ValidationError || err instanceof Error) {
+        setErrors(err?.message);
+      }
     }
   }
 

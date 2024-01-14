@@ -8,6 +8,7 @@ import {
   SignInResponseBody,
   UserProfileResponseBody,
   ErrorResponse,
+  ValidationError,
 } from './types';
 
 export class ApiClient {
@@ -44,11 +45,11 @@ export class ApiClient {
   private static checkBodyErrors(body: ErrorResponse, defaultMessage: string) {
     if (body?.errors) {
       if (Array.isArray(body?.errors) && body?.errors.length > 0) {
-        throw new Error(body?.errors.join('\n'));
+        throw new ValidationError(body.errors);
       }
 
       if (!Array.isArray(body?.errors) && body?.errors?.body) {
-        throw new Error(body?.errors.body.join('\n'));
+        throw new ValidationError(body.errors.body);
       }
     } else {
       throw new Error(defaultMessage);

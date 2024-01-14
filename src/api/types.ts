@@ -1,3 +1,10 @@
+export class ValidationError extends Error {
+  constructor(messages: string[]) {
+    super(messages.join('\n'));
+    this.name = 'ValidationError';
+  }
+}
+
 export type AuthHeader = {
   token: string;
 };

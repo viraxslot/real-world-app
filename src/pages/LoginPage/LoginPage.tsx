@@ -7,11 +7,12 @@ import AuthContext from '../../context/auth-context';
 import { PageName, Paths } from '../../helpers/paths';
 import { CookieNames } from '../../shared/constants';
 import { LOGIN_PAGE_LOCATORS } from './LoginPage.locators';
+import { ValidationError } from '../../api/types';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<string[] | null>(null);
+  const [errors, setErrors] = useState<string | null>(null);
   const { isAuthenticated, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -48,9 +49,10 @@ export function LoginPage() {
         secure: true,
         sameSite: 'strict',
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setErrors(err?.message.split('\n'));
+    } catch (err) {
+      if (err instanceof ValidationError || err instanceof Error) {
+        setErrors(err?.message);
+      }
     }
   }
 

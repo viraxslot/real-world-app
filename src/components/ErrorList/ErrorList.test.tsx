@@ -13,6 +13,15 @@ describe('ErrorList', () => {
     expect(element).not.toBeInTheDocument();
   });
 
+  it('with string', () => {
+    mount({ errors: 'test error' });
+    const element = screen.queryByTestId(ERROR_LIST_LOCATORS.itself);
+    expect(element).toBeInTheDocument();
+
+    const items = screen.queryAllByTestId(ERROR_LIST_LOCATORS.errorItem);
+    expect(items.length).toBe(1);
+  });
+
   describe('with error object', () => {
     it('valid object, several errors', () => {
       const errors = ['first error in object', 'second error in object'];

@@ -8,12 +8,12 @@ import AuthContext from '../../context/auth-context';
 import { CookieNames } from '../../shared/constants';
 
 export function Layout() {
-  const { isAuthenticated, setAuth } = useContext(AuthContext);
+  const { setAuth } = useContext(AuthContext);
 
   useEffect(() => {
     const getUserProfile = async () => {
       const token = Cookies.get(CookieNames.authToken) ?? '';
-      if (!token || !isAuthenticated) {
+      if (!token) {
         return;
       }
 
@@ -29,7 +29,7 @@ export function Layout() {
     };
 
     getUserProfile();
-  }, [isAuthenticated, setAuth]);
+  }, [setAuth]);
 
   return (
     <>

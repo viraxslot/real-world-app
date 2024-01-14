@@ -1,6 +1,6 @@
 import { ERROR_LIST_LOCATORS } from './ErrorList.locators';
 
-export type ErrorListProps = { errors: string[] | { body: string[] } | null };
+export type ErrorListProps = { errors: string | string[] | { body: string[] } | null };
 
 export function ErrorList({ errors }: ErrorListProps) {
   if (!errors || (Array.isArray(errors) && errors.length === 0)) {
@@ -10,6 +10,8 @@ export function ErrorList({ errors }: ErrorListProps) {
   let errorsList: string[] = [];
   if (Array.isArray(errors)) {
     errorsList = errors;
+  } else if (typeof errors === 'string') {
+    errorsList = errors.split('\n');
   } else {
     errorsList = errors?.body ? errors.body : [];
   }
