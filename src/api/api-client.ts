@@ -9,6 +9,7 @@ import {
   UserProfileResponseBody,
   ErrorResponse,
   ValidationError,
+  TagsResponseBody,
 } from './types';
 
 export class ApiClient {
@@ -98,6 +99,20 @@ export class ApiClient {
     const body = await this.getJsonBody(response);
     if (!response.ok) {
       this.checkBodyErrors(body, ClientErrors.unableToGetUserProfile);
+    }
+    return body;
+  }
+
+  static async tags(): Promise<TagsResponseBody> {
+    const response = await fetch(this.apiUrl + '/tags', {
+      method: 'GET',
+      headers: this.defaultHeaders,
+    });
+
+    this.checkServerStatus(response.status);
+    const body = await this.getJsonBody(response);
+    if (!response.ok) {
+      this.checkBodyErrors(body, ClientErrors.unableToGetTags);
     }
     return body;
   }

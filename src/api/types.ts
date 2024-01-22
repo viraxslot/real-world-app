@@ -40,3 +40,7 @@ export type SignInRequest = {
 
 export type SignInResponseBody = SignUpResponseBody;
 export type UserProfileResponseBody = SignUpResponseBody;
+
+export type TagsResponseBody = {
+  tags: string[];
+};

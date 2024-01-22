@@ -5,4 +5,5 @@ export const ClientErrors = {
   unableToLogin: 'unexpected error, unable to login',
   unableToRegister: 'unexpected error, unable to register a new user',
   unableToGetUserProfile: 'unexpected error, unable get user profile',
+  unableToGetTags: 'unexpected error, unable to get list of tags',
 };
