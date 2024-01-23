@@ -1,3 +1,5 @@
+import { Article } from '../shared/types';
+
 export class ValidationError extends Error {
   constructor(messages: string[]) {
     super(messages.join('\n'));
@@ -43,4 +45,14 @@ export type UserProfileResponseBody = SignUpResponseBody;
 
 export type TagsResponseBody = {
   tags: string[];
+};
+
+export type ArticlesRequestParams = {
+  offset?: number;
+  limit?: number;
+};
+
+export type ArticleResponseBody = {
+  articles: Article[];
+  articlesCount: number;
 };

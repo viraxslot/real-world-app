@@ -10,6 +10,8 @@ import {
   ErrorResponse,
   ValidationError,
   TagsResponseBody,
+  ArticlesRequestParams,
+  ArticleResponseBody,
 } from './types';
 
 export class ApiClient {
@@ -113,6 +115,25 @@ export class ApiClient {
     const body = await this.getJsonBody(response);
     if (!response.ok) {
       this.checkBodyErrors(body, ClientErrors.unableToGetTags);
+    }
+    return body;
+  }
+
+  static async articles(options?: ArticlesRequestParams): Promise<ArticleResponseBody> {
+    const params = new URLSearchParams('');
+    options?.offset ? params.set('offset', options.offset.toString()) : null;
+    options?.limit ? params.set('limit', options.limit.toString()) : null;
+
+    const url = `/articles?${params.toString()}`;
+    const response = await fetch(this.apiUrl + url, {
+      method: 'GET',
+      headers: this.defaultHeaders,
+    });
+
+    this.checkServerStatus(response.status);
+    const body = await this.getJsonBody(response);
+    if (!response.ok) {
+      this.checkBodyErrors(body, ClientErrors.unableToGetArticles);
     }
     return body;
   }
