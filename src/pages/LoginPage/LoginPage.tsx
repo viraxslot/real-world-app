@@ -43,6 +43,7 @@ export function LoginPage() {
       setAuth({
         isAuthenticated: true,
         username: signInBody?.user?.username,
+        token: signInBody.user.token,
       });
       Cookies.set(CookieNames.authToken, signInBody?.user?.token, {
         expires: 1,

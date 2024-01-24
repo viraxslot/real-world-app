@@ -18,10 +18,11 @@ export function Layout() {
       }
 
       try {
-        const profileBody = await ApiClient.userProfile({ token });
+        const profileBody = await ApiClient.userProfile(token);
         setAuth({
           isAuthenticated: true,
           username: profileBody?.user?.username,
+          token,
         });
       } catch (err) {
         console.error(err);

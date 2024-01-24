@@ -7,10 +7,6 @@ export class ValidationError extends Error {
   }
 }
 
-export type AuthHeader = {
-  token: string;
-};
-
 export type ErrorResponse = {
   errors: string[] | { body: string[] };
 };
@@ -47,9 +43,15 @@ export type TagsResponseBody = {
   tags: string[];
 };
 
-export type ArticlesRequestParams = {
+export type ArticlesFeedRequestParams = {
   offset?: number;
   limit?: number;
+};
+
+export type ArticlesRequestParams = ArticlesFeedRequestParams & {
+  tag?: string;
+  author?: string;
+  favorited?: string;
 };
 
 export type ArticleResponseBody = {

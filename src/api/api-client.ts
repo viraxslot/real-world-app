@@ -1,7 +1,6 @@
 import { Config } from '../config/config';
 import { ClientErrors } from '../shared/client-errors';
 import {
-  AuthHeader,
   SignInRequest,
   SignUpResponseBody,
   SignUpRequest,
@@ -12,12 +11,14 @@ import {
   TagsResponseBody,
   ArticlesRequestParams,
   ArticleResponseBody,
+  ArticlesFeedRequestParams,
 } from './types';
 
 export class ApiClient {
   static apiUrl = Config.apiUrl;
-  static getAuthHeader = (token: string) => {
+  static getAuthHeaders = (token: string) => {
     return {
+      ...ApiClient.defaultHeaders,
       Authorization: `Token ${token}`,
     };
   };
@@ -40,6 +41,7 @@ export class ApiClient {
     try {
       body = await response.json();
     } catch (err) {
+      console.error(err);
       throw new Error(ClientErrors.unableToParseResponseBody);
     }
     return body;
@@ -59,81 +61,117 @@ export class ApiClient {
     }
   }
 
+  // TODO: ideas how to add type safety here?
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private static getURLParams(options: any): string {
+    if (typeof options !== 'object' || Array.isArray(options)) {
+      return '';
+    }
+
+    const params = new URLSearchParams('');
+    for (const key of Object.keys(options)) {
+      if (options[key] != null) {
+        params.set(key, options[key].toString());
+      }
+    }
+
+    return params.toString();
+  }
+
   static async signUp(options: SignUpRequest): Promise<SignUpResponseBody | never> {
-    const response = await fetch(this.apiUrl + '/users', {
+    const response = await fetch(ApiClient.apiUrl + '/users', {
       method: 'POST',
-      headers: this.defaultHeaders,
+      headers: ApiClient.defaultHeaders,
       body: JSON.stringify(options),
     });
 
-    this.checkServerStatus(response.status);
-    const body = await this.getJsonBody(response);
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
     if (!response.ok) {
-      this.checkBodyErrors(body, ClientErrors.unableToRegister);
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToRegister);
     }
     return body;
   }
 
   static async signIn(options: SignInRequest): Promise<SignInResponseBody> {
-    const response = await fetch(this.apiUrl + '/users/login', {
+    const response = await fetch(ApiClient.apiUrl + '/users/login', {
       method: 'POST',
-      headers: this.defaultHeaders,
+      headers: ApiClient.defaultHeaders,
       body: JSON.stringify(options),
     });
 
-    this.checkServerStatus(response.status);
-    const body = await this.getJsonBody(response);
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
     if (!response.ok) {
-      this.checkBodyErrors(body, ClientErrors.unableToLogin);
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToLogin);
     }
     return body;
   }
 
-  static async userProfile(authHeader: AuthHeader): Promise<UserProfileResponseBody | never> {
-    const auth = this.getAuthHeader(authHeader.token);
-
-    const response = await fetch(this.apiUrl + '/user', {
+  static async userProfile(token: string): Promise<UserProfileResponseBody | never> {
+    const response = await fetch(ApiClient.apiUrl + '/user', {
       method: 'GET',
-      headers: { ...this.defaultHeaders, ...auth },
+      headers: ApiClient.getAuthHeaders(token),
     });
 
-    this.checkServerStatus(response.status);
-    const body = await this.getJsonBody(response);
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
     if (!response.ok) {
-      this.checkBodyErrors(body, ClientErrors.unableToGetUserProfile);
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetUserProfile);
     }
     return body;
   }
 
   static async tags(): Promise<TagsResponseBody> {
-    const response = await fetch(this.apiUrl + '/tags', {
+    const response = await fetch(ApiClient.apiUrl + '/tags', {
       method: 'GET',
-      headers: this.defaultHeaders,
+      headers: ApiClient.defaultHeaders,
     });
 
-    this.checkServerStatus(response.status);
-    const body = await this.getJsonBody(response);
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
     if (!response.ok) {
-      this.checkBodyErrors(body, ClientErrors.unableToGetTags);
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetTags);
     }
     return body;
   }
 
-  static async articles(options?: ArticlesRequestParams): Promise<ArticleResponseBody> {
-    const params = new URLSearchParams('');
-    options?.offset ? params.set('offset', options.offset.toString()) : null;
-    options?.limit ? params.set('limit', options.limit.toString()) : null;
+  static async articles(
+    options?: ArticlesRequestParams,
+    token?: string,
+  ): Promise<ArticleResponseBody> {
+    const params = ApiClient.getURLParams(options);
+    const url = `/articles?${params}`;
 
-    const url = `/articles?${params.toString()}`;
-    const response = await fetch(this.apiUrl + url, {
+    const response = await fetch(ApiClient.apiUrl + url, {
       method: 'GET',
-      headers: this.defaultHeaders,
+      headers: ApiClient.getAuthHeaders(token ?? ''),
     });
 
-    this.checkServerStatus(response.status);
-    const body = await this.getJsonBody(response);
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
     if (!response.ok) {
-      this.checkBodyErrors(body, ClientErrors.unableToGetArticles);
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetArticles);
+    }
+    return body;
+  }
+
+  static async articlesFeed(
+    options?: ArticlesFeedRequestParams,
+    token?: string,
+  ): Promise<ArticleResponseBody> {
+    const params = ApiClient.getURLParams(options);
+    const url = `/articles/feed?${params}`;
+
+    const response = await fetch(ApiClient.apiUrl + url, {
+      method: 'GET',
+      headers: ApiClient.getAuthHeaders(token ?? ''),
+    });
+
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
+    if (!response.ok) {
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetArticles);
     }
     return body;
   }

@@ -16,17 +16,20 @@ export function PopularTags() {
       }
     };
     getTags();
-  }, [tags]);
+  }, []);
 
   return (
-    <ul className="tag-list" data-testid={POPULAR_TAGS_LOCATORS.itself}>
-      {tags.map((el, index) => (
-        <li key={index}>
-          <a href="" className="tag-pill tag-default">
-            <div data-testid={POPULAR_TAGS_LOCATORS.item}>{el}</div>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <>
+      <p>Popular Tags</p>
+      <ul className="tag-list" data-testid={POPULAR_TAGS_LOCATORS.itself}>
+        {tags.map((el, index) => (
+          <li key={index}>
+            <a href="" className="tag-pill tag-default">
+              <div data-testid={POPULAR_TAGS_LOCATORS.item}>{el}</div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
