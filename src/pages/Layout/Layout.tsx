@@ -1,18 +1,17 @@
-import Cookies from 'js-cookie';
 import { useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ApiClient } from '../../api/api-client';
 import { Footer } from '../../components/Footer/Footer';
 import { Header } from '../../components/Header/Header';
 import AuthContext from '../../context/auth-context';
-import { CookieNames } from '../../shared/constants';
+import cookieHelper from '../../helpers/cookie.helper';
 
 export function Layout() {
   const { setAuth } = useContext(AuthContext);
 
   useEffect(() => {
     const getUserProfile = async () => {
-      const token = Cookies.get(CookieNames.authToken) ?? '';
+      const token = cookieHelper.get('jwt-token') ?? '';
       if (!token) {
         return;
       }
