@@ -76,6 +76,7 @@ export function LoginPage() {
             <form onSubmit={handleFormSubmit}>
               <fieldset className="form-group">
                 <input
+                  autoFocus
                   className="form-control form-control-lg"
                   type="text"
                   placeholder="Email"
