@@ -9,16 +9,15 @@ import { YOUR_FEED } from '../../shared/constants';
 
 type ArticlesProps = {
   feedType: string;
-  tag?: string;
 };
 
-export function Articles({ feedType, tag }: ArticlesProps) {
+export function Articles({ feedType }: ArticlesProps) {
   const { token } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [articlesOnPage, setArticlesOnPage] = useState<Article[]>([]);
 
-  const articlesPerPage = 5;
-  const pagesCount = useArticlePageCount(articlesPerPage);
+  const articlesPerPage = 3;
+  const pagesCount = useArticlePageCount({ feedType, articlesPerPage });
 
   useEffect(() => {
     const getArticles = async () => {
@@ -28,7 +27,7 @@ export function Articles({ feedType, tag }: ArticlesProps) {
           {
             offset: (currentPage - 1) * articlesPerPage,
             limit: articlesPerPage,
-            tag,
+            feedType,
           },
           token,
         );
@@ -43,7 +42,7 @@ export function Articles({ feedType, tag }: ArticlesProps) {
     };
 
     getArticles();
-  }, [token, tag, feedType, currentPage]);
+  }, [token, feedType, currentPage]);
 
   const handleOnClickFavoriteButton = (article: Article) => {
     const articleIndex = articlesOnPage.findIndex((a: Article) => a.slug === article.slug);
@@ -62,7 +61,7 @@ export function Articles({ feedType, tag }: ArticlesProps) {
           <ArticlePreview
             article={article}
             key={article.slug}
-            handleOnClick={handleOnClickFavoriteButton}
+            favoriteClickHandler={handleOnClickFavoriteButton}
           />
         );
       })}

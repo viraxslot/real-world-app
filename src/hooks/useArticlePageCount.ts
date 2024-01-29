@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react';
 import { ApiClient } from '../api/api-client';
 
-export function useArticlePageCount(articlesPerPage: number) {
+type ArticlesPageCountProps = {
+  articlesPerPage: number;
+  feedType: string;
+};
+
+export function useArticlePageCount({ articlesPerPage, feedType }: ArticlesPageCountProps) {
   const [pagesCount, setPagesCount] = useState<number>(1);
 
   useEffect(() => {
     const getArticles = async () => {
       let body;
       try {
-        body = await ApiClient.articles();
+        body = await ApiClient.articles({ feedType });
         setPagesCount(Math.ceil(body?.articlesCount / articlesPerPage));
       } catch (err) {
         console.error(err);
@@ -16,7 +21,7 @@ export function useArticlePageCount(articlesPerPage: number) {
     };
 
     getArticles();
-  }, []);
+  }, [articlesPerPage, feedType]);
 
   return pagesCount;
 }

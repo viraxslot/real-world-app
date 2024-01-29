@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import { ApiClient } from '../../api/api-client';
 import { POPULAR_TAGS_LOCATORS } from './PopularTags.locators';
 
-export function PopularTags() {
+type PopularTagsProps = {
+  tagClickHandler: (tag: string) => void;
+};
+
+export function PopularTags({ tagClickHandler }: PopularTagsProps) {
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
@@ -18,14 +22,23 @@ export function PopularTags() {
     getTags();
   }, []);
 
+  const handleTagOnClick = (e: React.MouseEvent, tag: string) => {
+    e.preventDefault();
+    tagClickHandler(tag);
+  };
+
   return (
     <>
       <p>Popular Tags</p>
       <ul className="tag-list" data-testid={POPULAR_TAGS_LOCATORS.itself}>
-        {tags.map((el, index) => (
-          <li key={index}>
-            <a href="" className="tag-pill tag-default">
-              <div data-testid={POPULAR_TAGS_LOCATORS.item}>{el}</div>
+        {tags.map((tag) => (
+          <li key={tag}>
+            <a
+              href=""
+              className="tag-pill tag-default"
+              onClick={(event) => handleTagOnClick(event, tag)}
+            >
+              <div data-testid={POPULAR_TAGS_LOCATORS.item}>{tag}</div>
             </a>
           </li>
         ))}

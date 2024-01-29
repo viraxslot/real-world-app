@@ -49,7 +49,7 @@ export type ArticlesFeedRequestParams = {
 };
 
 export type ArticlesRequestParams = ArticlesFeedRequestParams & {
-  tag?: string;
+  feedType?: string;
   author?: string;
   favorited?: string;
 };

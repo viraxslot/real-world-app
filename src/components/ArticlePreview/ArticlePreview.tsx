@@ -6,11 +6,11 @@ import AuthContext from '../../context/auth-context';
 import { Article } from '../../shared/types';
 
 type ArticlePreviewProps = {
-  handleOnClick: (article: Article) => void;
+  favoriteClickHandler: (article: Article) => void;
   article: Article;
 };
 
-export function ArticlePreview({ article, handleOnClick }: ArticlePreviewProps) {
+export function ArticlePreview({ article, favoriteClickHandler }: ArticlePreviewProps) {
   const { isAuthenticated, token } = useContext(AuthContext);
 
   const profileUrl = `/profile/${article.author.username}`;
@@ -47,7 +47,7 @@ export function ArticlePreview({ article, handleOnClick }: ArticlePreviewProps) 
             )}
             onClick={async () => {
               const response = await handleOnClickFavoriteButton();
-              handleOnClick(response?.article);
+              favoriteClickHandler(response?.article);
             }}
           >
             <i className="ion-heart"></i> {article.favoritesCount ?? 0}

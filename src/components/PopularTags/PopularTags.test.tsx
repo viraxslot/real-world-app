@@ -4,7 +4,7 @@ import { POPULAR_TAGS_LOCATORS } from './PopularTags.locators';
 import { PopularTags } from './PopularTags';
 
 const mount = () => {
-  render(<PopularTags />);
+  render(<PopularTags tagClickHandler={() => vi.fn()} />);
 };
 
 describe('Tags list', () => {

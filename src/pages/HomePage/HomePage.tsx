@@ -17,15 +17,30 @@ export function HomePage() {
     }
 
     if (!isAuthenticated) {
-      const feedIndex = feeds.indexOf(YOUR_FEED);
-      if (feedIndex !== -1) {
-        // TODO: should I copy here?
-        const tempFeeds = [...feeds];
-        tempFeeds.splice(feedIndex, 1);
-        setFeeds(tempFeeds);
-      }
+      removeFeed(YOUR_FEED);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, feeds]);
+
+  const removeFeed = (feed: string) => {
+    const feedIndex = feeds.indexOf(feed);
+    if (feedIndex !== -1) {
+      // TODO: should I copy here?
+      const tempFeeds = [...feeds];
+      tempFeeds.splice(feedIndex, 1);
+      setFeeds(tempFeeds);
+    }
+  };
+
+  const handleTagOnClick = (tag: string) => {
+    if (feeds.includes(tag)) {
+      removeFeed(tag);
+      setActiveFeed(GLOBAL_FEED);
+    } else {
+      setFeeds([...feeds, tag]);
+      setActiveFeed(tag);
+    }
+  };
 
   const handleChangeTab = (feedTitle: string) => {
     setActiveFeed(feedTitle);
@@ -57,7 +72,7 @@ export function HomePage() {
 
           <div className="col-md-3">
             <div className="sidebar">
-              <PopularTags />
+              <PopularTags tagClickHandler={handleTagOnClick} />
             </div>
           </div>
         </div>

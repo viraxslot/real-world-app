@@ -1,5 +1,6 @@
 import { Config } from '../config/config';
 import { ClientErrors } from '../shared/client-errors';
+import { GLOBAL_FEED, YOUR_FEED } from '../shared/constants';
 import {
   SignInRequest,
   SignUpResponseBody,
@@ -63,11 +64,15 @@ export class ApiClient {
     }
   }
 
-  private static getURLParams(options: Record<string, string | number>): string {
+  private static getURLParams(
+    options: Record<string, string | number | undefined>,
+    excludeFields: string[] = [],
+  ): string {
     const params = new URLSearchParams('');
+
     for (const key of Object.keys(options)) {
-      if (options[key] != null) {
-        params.set(key, options[key].toString());
+      if (options[key] != null && !excludeFields.includes(key)) {
+        params.set(key, options[key]!.toString());
       }
     }
 
@@ -136,11 +141,17 @@ export class ApiClient {
     options?: ArticlesRequestParams,
     token?: string,
   ): Promise<ArticleResponseBody> {
-    let params: string;
     let url = '/articles';
 
     if (options) {
-      params = ApiClient.getURLParams(options);
+      let params = ApiClient.getURLParams(options, ['feedType']);
+      if (options?.feedType) {
+        const tag = ![GLOBAL_FEED, YOUR_FEED].includes(options?.feedType)
+          ? options?.feedType
+          : undefined;
+
+        params = ApiClient.getURLParams({ ...options, tag }, ['feedType']);
+      }
       url += `?${params}`;
     }
 
