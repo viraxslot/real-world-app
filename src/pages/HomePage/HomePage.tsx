@@ -1,12 +1,10 @@
 import { Banner } from '../../components/Banner/Banner';
-import { ArticlePagination } from '../../components/ArticlePagination/ArticlePagination';
+import { Articles } from '../../components/Articles/Articles';
 import { PopularTags } from '../../components/PopularTags/PopularTags';
 import { FeedTab } from '../../components/FeedTab/FeedTab';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../context/auth-context';
-
-export const YOUR_FEED = 'Your Feed';
-export const GLOBAL_FEED = 'Global Feed';
+import { GLOBAL_FEED, YOUR_FEED } from '../../shared/constants';
 
 export function HomePage() {
   const { isAuthenticated } = useContext(AuthContext);
@@ -22,12 +20,12 @@ export function HomePage() {
       const feedIndex = feeds.indexOf(YOUR_FEED);
       if (feedIndex !== -1) {
         // TODO: should I copy here?
-        let tempFeeds = [...feeds];
+        const tempFeeds = [...feeds];
         tempFeeds.splice(feedIndex, 1);
         setFeeds(tempFeeds);
       }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, feeds]);
 
   const handleChangeTab = (feedTitle: string) => {
     setActiveFeed(feedTitle);
@@ -54,7 +52,7 @@ export function HomePage() {
                 })}
               </ul>
             </div>
-            <ArticlePagination feedType={activeFeed} />
+            <Articles feedType={activeFeed} />
           </div>
 
           <div className="col-md-3">

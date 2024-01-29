@@ -6,9 +6,9 @@ import { AuthContextProps } from '../../context/types';
 import { Header } from './Header';
 import { HEADER_LOCATORS } from './Header.locators';
 
-const mount = ({ isAuthenticated, username, setAuth }: AuthContextProps) => {
+const mount = ({ isAuthenticated, username, setAuth, token }: AuthContextProps) => {
   render(
-    <AuthContext.Provider value={{ isAuthenticated, username, setAuth }}>
+    <AuthContext.Provider value={{ isAuthenticated, username, setAuth, token }}>
       <MemoryRouter>
         <Header />
       </MemoryRouter>
@@ -46,7 +46,7 @@ describe('Header', () => {
 
   defaultNavLinks.forEach((element) => {
     it(`renders item ${element.name} when not authenticated`, () => {
-      mount({ isAuthenticated: false, username: 'test', setAuth: () => {} });
+      mount({ isAuthenticated: false, username: 'test', setAuth: () => {}, token: '' });
 
       const el = screen.getByTestId(element.locator);
       expect(el).toBeInTheDocument();
@@ -95,7 +95,7 @@ describe('Header', () => {
   authUserNavLinks.forEach((element) => {
     it(`renders item ${element.name} when authenticated`, () => {
       const username = 'test user';
-      mount({ isAuthenticated: true, username, setAuth: () => {} });
+      mount({ isAuthenticated: true, username, setAuth: () => {}, token: 'test' });
 
       const el = screen.getByTestId(element.locator);
       expect(el).toBeInTheDocument();
@@ -109,7 +109,7 @@ describe('Header', () => {
 
   it('changes state on logout button', async () => {
     const setAuth = vi.fn();
-    mount({ isAuthenticated: true, username: 'test', setAuth });
+    mount({ isAuthenticated: true, username: 'test', setAuth, token: '' });
     const user = userEvent.setup();
 
     expect(screen.getByTestId(HEADER_LOCATORS.logoutButon)).toBeInTheDocument();

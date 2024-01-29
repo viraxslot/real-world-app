@@ -1,10 +1,9 @@
 import clsx from 'clsx';
-import { Feed } from '../../pages/HomePage/HomePage';
 
 export type FeedTabProps = {
   active: boolean;
-  title: Feed;
-  changeTab: (feedTitle: Feed) => void;
+  title: string;
+  changeTab: (feedTitle: string) => void;
 };
 
 export function FeedTab({ title, active, changeTab }: FeedTabProps) {

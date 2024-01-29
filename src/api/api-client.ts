@@ -12,6 +12,8 @@ import {
   ArticlesRequestParams,
   ArticleResponseBody,
   ArticlesFeedRequestParams,
+  LikeArticleRequest,
+  FavoriteArticleResponseBody,
 } from './types';
 
 export class ApiClient {
@@ -61,13 +63,7 @@ export class ApiClient {
     }
   }
 
-  // TODO: ideas how to add type safety here?
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static getURLParams(options: any): string {
-    if (typeof options !== 'object' || Array.isArray(options)) {
-      return '';
-    }
-
+  private static getURLParams(options: Record<string, string | number>): string {
     const params = new URLSearchParams('');
     for (const key of Object.keys(options)) {
       if (options[key] != null) {
@@ -140,8 +136,13 @@ export class ApiClient {
     options?: ArticlesRequestParams,
     token?: string,
   ): Promise<ArticleResponseBody> {
-    const params = ApiClient.getURLParams(options);
-    const url = `/articles?${params}`;
+    let params: string;
+    let url = '/articles';
+
+    if (options) {
+      params = ApiClient.getURLParams(options);
+      url += `?${params}`;
+    }
 
     const response = await fetch(ApiClient.apiUrl + url, {
       method: 'GET',
@@ -157,7 +158,7 @@ export class ApiClient {
   }
 
   static async articlesFeed(
-    options?: ArticlesFeedRequestParams,
+    options: ArticlesFeedRequestParams,
     token?: string,
   ): Promise<ArticleResponseBody> {
     const params = ApiClient.getURLParams(options);
@@ -165,6 +166,25 @@ export class ApiClient {
 
     const response = await fetch(ApiClient.apiUrl + url, {
       method: 'GET',
+      headers: ApiClient.getAuthHeaders(token ?? ''),
+    });
+
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
+    if (!response.ok) {
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetArticles);
+    }
+    return body;
+  }
+
+  static async favoriteArticle(
+    options?: LikeArticleRequest,
+    token?: string,
+  ): Promise<FavoriteArticleResponseBody> {
+    const url = `/articles/${options?.slug}/favorite`;
+
+    const response = await fetch(ApiClient.apiUrl + url, {
+      method: options?.like ? 'POST' : 'DELETE',
       headers: ApiClient.getAuthHeaders(token ?? ''),
     });
 

@@ -1,12 +1,31 @@
+import clsx from 'clsx';
+import { DateTime } from 'luxon';
+import { useContext } from 'react';
+import { ApiClient } from '../../api/api-client';
+import AuthContext from '../../context/auth-context';
 import { Article } from '../../shared/types';
 
 type ArticlePreviewProps = {
+  handleOnClick: (article: Article) => void;
   article: Article;
 };
 
-export function ArticlePreview({ article }: ArticlePreviewProps) {
+export function ArticlePreview({ article, handleOnClick }: ArticlePreviewProps) {
+  const { isAuthenticated, token } = useContext(AuthContext);
+
   const profileUrl = `/profile/${article.author.username}`;
   const articleUrl = `/article/${article.slug}`;
+  const createdAt = DateTime.fromISO(article.createdAt);
+
+  const handleOnClickFavoriteButton = async () => {
+    return ApiClient.favoriteArticle(
+      {
+        slug: article.slug,
+        like: !article.favorited,
+      },
+      token,
+    );
+  };
 
   return (
     <div className="article-preview">
@@ -18,11 +37,22 @@ export function ArticlePreview({ article }: ArticlePreviewProps) {
           <a href={profileUrl} className="author">
             {article.author.username}
           </a>
-          <span className="date">{article.createdAt}</span>
+          <span className="date">{createdAt.toLocaleString(DateTime.DATE_FULL)}</span>
         </div>
-        <button className="btn btn-outline-primary btn-sm pull-xs-right">
-          <i className="ion-heart"></i> {article.favoritesCount ?? 0}
-        </button>
+        {isAuthenticated && (
+          <button
+            className={clsx(
+              'btn btn-sm pull-xs-right',
+              article.favorited ? 'btn-primary' : 'btn-outline-primary',
+            )}
+            onClick={async () => {
+              const response = await handleOnClickFavoriteButton();
+              handleOnClick(response?.article);
+            }}
+          >
+            <i className="ion-heart"></i> {article.favoritesCount ?? 0}
+          </button>
+        )}
       </div>
       <a href={articleUrl} className="preview-link">
         <h1>{article.title}</h1>

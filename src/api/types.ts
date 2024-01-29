@@ -54,7 +54,16 @@ export type ArticlesRequestParams = ArticlesFeedRequestParams & {
   favorited?: string;
 };
 
+export type FavoriteArticleResponseBody = {
+  article: Article;
+};
+
 export type ArticleResponseBody = {
   articles: Article[];
   articlesCount: number;
+};
+
+export type LikeArticleRequest = {
+  like: boolean;
+  slug: string;
 };
