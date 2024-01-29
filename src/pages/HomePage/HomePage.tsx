@@ -5,22 +5,13 @@ import { FeedTab } from '../../components/FeedTab/FeedTab';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../context/auth-context';
 import { GLOBAL_FEED, YOUR_FEED } from '../../shared/constants';
+import cookieHelper from '../../helpers/cookie.helper';
 
 export function HomePage() {
   const { isAuthenticated } = useContext(AuthContext);
   const [activeFeed, setActiveFeed] = useState<string>(GLOBAL_FEED);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [feeds, setFeeds] = useState<string[]>([GLOBAL_FEED]);
-
-  useEffect(() => {
-    if (isAuthenticated && !feeds.includes(YOUR_FEED)) {
-      setFeeds([YOUR_FEED, ...feeds]);
-    }
-
-    if (!isAuthenticated) {
-      removeFeed(YOUR_FEED);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, feeds]);
 
   const removeFeed = (feed: string) => {
     const feedIndex = feeds.indexOf(feed);
@@ -32,18 +23,73 @@ export function HomePage() {
     }
   };
 
+  const removeTag = (tag: string) => {
+    const tagIndex = selectedTags.indexOf(tag);
+    if (tagIndex !== -1) {
+      const tempTags = [...selectedTags];
+      tempTags.splice(tagIndex, 1);
+      setSelectedTags(tempTags);
+    }
+  };
+
+  const saveActiveFeed = (feed: string) => {
+    setActiveFeed(feed);
+    cookieHelper.set('active-feed', feed);
+  };
+
+  useEffect(() => {
+    if (isAuthenticated && !feeds.includes(YOUR_FEED)) {
+      setFeeds([YOUR_FEED, ...feeds]);
+    }
+    if (!isAuthenticated) {
+      removeFeed(YOUR_FEED);
+      if (activeFeed === YOUR_FEED) {
+        saveActiveFeed(GLOBAL_FEED);
+      }
+    }
+    // TODO: why it asks to add removeFeed?
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, feeds]);
+
+  useEffect(() => {
+    const activeFeed = cookieHelper.get('active-feed');
+    const tagsCookie = cookieHelper.get('selected-tags');
+
+    if (tagsCookie) {
+      try {
+        const tags = JSON.parse(tagsCookie);
+        setSelectedTags(tags);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    if (activeFeed) {
+      if (activeFeed === YOUR_FEED && !isAuthenticated) {
+        // TODO: here's a problem, because on the first render isAuthenticated is false
+        saveActiveFeed(GLOBAL_FEED);
+      } else {
+        saveActiveFeed(activeFeed);
+      }
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    cookieHelper.set('selected-tags', JSON.stringify(selectedTags));
+  }, [selectedTags]);
+
   const handleTagOnClick = (tag: string) => {
-    if (feeds.includes(tag)) {
-      removeFeed(tag);
-      setActiveFeed(GLOBAL_FEED);
+    if (selectedTags.includes(tag)) {
+      removeTag(tag);
+      saveActiveFeed(GLOBAL_FEED);
     } else {
-      setFeeds([...feeds, tag]);
-      setActiveFeed(tag);
+      setSelectedTags([...selectedTags, tag]);
+      saveActiveFeed(tag);
     }
   };
 
   const handleChangeTab = (feedTitle: string) => {
-    setActiveFeed(feedTitle);
+    saveActiveFeed(feedTitle);
   };
 
   return (
@@ -55,7 +101,7 @@ export function HomePage() {
           <div className="col-md-9">
             <div className="feed-toggle">
               <ul className="nav nav-pills outline-active">
-                {feeds.map((feed, idx) => {
+                {[...feeds, ...selectedTags].map((feed, idx) => {
                   return (
                     <FeedTab
                       key={idx}

@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-type CookieNames = 'jwt-token';
+type CookieNames = 'jwt-token' | 'selected-tags' | 'active-feed';
 
 type CookieHelper = {
   get: (name: CookieNames) => string;

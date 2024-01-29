@@ -16,7 +16,7 @@ export function Articles({ feedType }: ArticlesProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [articlesOnPage, setArticlesOnPage] = useState<Article[]>([]);
 
-  const articlesPerPage = 3;
+  const articlesPerPage = 5;
   const pagesCount = useArticlePageCount({ feedType, articlesPerPage });
 
   useEffect(() => {
