@@ -36,7 +36,7 @@ export function HomePage() {
         saveActiveFeed(GLOBAL_FEED);
       }
     }
-  }, [isAuthenticated, feeds, activeFeed]);
+  }, [isAuthenticated, feeds, setFeeds, activeFeed]);
 
   useEffect(() => {
     const activeFeed = cookieHelper.get('active-feed');

@@ -56,21 +56,26 @@ export function Articles({ feedType }: ArticlesProps) {
 
   return (
     <>
-      {articlesOnPage?.map((article) => {
-        return (
-          <ArticlePreview
-            article={article}
-            key={article.slug}
-            onFavoriteButtonClick={handleFavoriteButtonClick}
+      {articlesOnPage.length > 0 ? (
+        <>
+          {articlesOnPage?.map((article) => (
+            <ArticlePreview
+              article={article}
+              key={article.slug}
+              onFavoriteButtonClick={handleFavoriteButtonClick}
+            />
+          ))}
+          <Pagination
+            currentPage={currentPage}
+            pagesCount={pagesCount}
+            setCurrentPage={setCurrentPage}
           />
-        );
-      })}
-
-      <Pagination
-        currentPage={currentPage}
-        pagesCount={pagesCount}
-        setCurrentPage={setCurrentPage}
-      />
+        </>
+      ) : (
+        <div className="article-preview">
+          <span className="article-meta">No articles here! Please try to follow some authors.</span>
+        </div>
+      )}
     </>
   );
 }
