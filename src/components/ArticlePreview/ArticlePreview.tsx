@@ -6,25 +6,26 @@ import AuthContext from '../../context/auth-context';
 import { Article } from '../../shared/types';
 
 type ArticlePreviewProps = {
-  favoriteClickHandler: (article: Article) => void;
+  onFavoriteButtonClick: (article: Article) => void;
   article: Article;
 };
 
-export function ArticlePreview({ article, favoriteClickHandler }: ArticlePreviewProps) {
+export function ArticlePreview({ article, onFavoriteButtonClick }: ArticlePreviewProps) {
   const { isAuthenticated, token } = useContext(AuthContext);
 
   const profileUrl = `/profile/${article.author.username}`;
   const articleUrl = `/article/${article.slug}`;
   const createdAt = DateTime.fromISO(article.createdAt);
 
-  const handleOnClickFavoriteButton = async () => {
-    return ApiClient.favoriteArticle(
+  const handleFavoriteButtonClick = async () => {
+    const response = await ApiClient.favoriteArticle(
       {
         slug: article.slug,
         like: !article.favorited,
       },
       token,
     );
+    onFavoriteButtonClick(response?.article);
   };
 
   return (
@@ -45,10 +46,7 @@ export function ArticlePreview({ article, favoriteClickHandler }: ArticlePreview
               'btn btn-sm pull-xs-right',
               article.favorited ? 'btn-primary' : 'btn-outline-primary',
             )}
-            onClick={async () => {
-              const response = await handleOnClickFavoriteButton();
-              favoriteClickHandler(response?.article);
-            }}
+            onClick={handleFavoriteButtonClick}
           >
             <i className="ion-heart"></i> {article.favoritesCount ?? 0}
           </button>

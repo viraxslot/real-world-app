@@ -44,7 +44,7 @@ export function Articles({ feedType }: ArticlesProps) {
     getArticles();
   }, [token, feedType, currentPage]);
 
-  const handleOnClickFavoriteButton = (article: Article) => {
+  const handleFavoriteButtonClick = (article: Article) => {
     const articleIndex = articlesOnPage.findIndex((a: Article) => a.slug === article.slug);
 
     if (articleIndex !== -1) {
@@ -61,7 +61,7 @@ export function Articles({ feedType }: ArticlesProps) {
           <ArticlePreview
             article={article}
             key={article.slug}
-            favoriteClickHandler={handleOnClickFavoriteButton}
+            onFavoriteButtonClick={handleFavoriteButtonClick}
           />
         );
       })}

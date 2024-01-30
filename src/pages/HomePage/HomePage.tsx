@@ -13,43 +13,30 @@ export function HomePage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [feeds, setFeeds] = useState<string[]>([GLOBAL_FEED]);
 
-  const removeFeed = (feed: string) => {
-    const feedIndex = feeds.indexOf(feed);
-    if (feedIndex !== -1) {
-      // TODO: should I copy here?
-      const tempFeeds = [...feeds];
-      tempFeeds.splice(feedIndex, 1);
-      setFeeds(tempFeeds);
-    }
-  };
-
-  const removeTag = (tag: string) => {
-    const tagIndex = selectedTags.indexOf(tag);
-    if (tagIndex !== -1) {
-      const tempTags = [...selectedTags];
-      tempTags.splice(tagIndex, 1);
-      setSelectedTags(tempTags);
-    }
-  };
-
   const saveActiveFeed = (feed: string) => {
     setActiveFeed(feed);
     cookieHelper.set('active-feed', feed);
+  };
+
+  const saveSelectedTags = (tags: string[]) => {
+    setSelectedTags(tags);
+    cookieHelper.set('selected-tags', JSON.stringify(tags));
   };
 
   useEffect(() => {
     if (isAuthenticated && !feeds.includes(YOUR_FEED)) {
       setFeeds([YOUR_FEED, ...feeds]);
     }
+
     if (!isAuthenticated) {
-      removeFeed(YOUR_FEED);
+      setFeeds((prevFeeds) => {
+        return prevFeeds.filter((el) => el !== YOUR_FEED);
+      });
       if (activeFeed === YOUR_FEED) {
         saveActiveFeed(GLOBAL_FEED);
       }
     }
-    // TODO: why it asks to add removeFeed?
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, feeds]);
+  }, [isAuthenticated, feeds, activeFeed]);
 
   useEffect(() => {
     const activeFeed = cookieHelper.get('active-feed');
@@ -58,7 +45,7 @@ export function HomePage() {
     if (tagsCookie) {
       try {
         const tags = JSON.parse(tagsCookie);
-        setSelectedTags(tags);
+        saveSelectedTags(tags);
       } catch (err) {
         console.error(err);
       }
@@ -74,16 +61,14 @@ export function HomePage() {
     }
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    cookieHelper.set('selected-tags', JSON.stringify(selectedTags));
-  }, [selectedTags]);
-
   const handleTagOnClick = (tag: string) => {
     if (selectedTags.includes(tag)) {
-      removeTag(tag);
+      setSelectedTags((prevTags) => {
+        return prevTags.filter((el) => el !== tag);
+      });
       saveActiveFeed(GLOBAL_FEED);
     } else {
-      setSelectedTags([...selectedTags, tag]);
+      saveSelectedTags([...selectedTags, tag]);
       saveActiveFeed(tag);
     }
   };
