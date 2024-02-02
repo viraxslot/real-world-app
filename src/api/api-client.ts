@@ -1,6 +1,7 @@
 import { Config } from '../config/config';
 import { ClientErrors } from '../shared/client-errors';
 import { GLOBAL_FEED, YOUR_FEED } from '../shared/constants';
+import { Article } from '../shared/types';
 import {
   SignInRequest,
   SignUpResponseBody,
@@ -164,6 +165,10 @@ export class ApiClient {
     const body = await ApiClient.getJsonBody(response);
     if (!response.ok) {
       ApiClient.checkBodyErrors(body, ClientErrors.unableToGetArticles);
+    }
+
+    if (options?.feedType === YOUR_FEED) {
+      body.articles = body.articles.filter((a: Article) => a.author.following);
     }
     return body;
   }

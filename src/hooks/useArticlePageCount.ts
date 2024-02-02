@@ -14,7 +14,7 @@ export function useArticlePageCount({ articlesPerPage, feedType }: ArticlesPageC
       let body;
       try {
         body = await ApiClient.articles({ feedType });
-        setPagesCount(Math.ceil(body?.articlesCount / articlesPerPage));
+        setPagesCount(Math.ceil(body?.articles.length / articlesPerPage));
       } catch (err) {
         console.error(err);
       }
