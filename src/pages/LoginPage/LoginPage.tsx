@@ -1,13 +1,12 @@
-import Cookies from 'js-cookie';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ApiClient } from '../../api/api-client';
 import { ErrorList } from '../../components/ErrorList/ErrorList';
 import AuthContext from '../../context/auth-context';
 import { PageName, Paths } from '../../helpers/paths';
-import { CookieNames } from '../../shared/constants';
 import { LOGIN_PAGE_LOCATORS } from './LoginPage.locators';
 import { ValidationError } from '../../api/types';
+import cookieHelper from '../../helpers/cookie.helper';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -43,8 +42,9 @@ export function LoginPage() {
       setAuth({
         isAuthenticated: true,
         username: signInBody?.user?.username,
+        token: signInBody.user.token,
       });
-      Cookies.set(CookieNames.authToken, signInBody?.user?.token, {
+      cookieHelper.set('jwt-token', signInBody?.user?.token, {
         expires: 1,
         secure: true,
         sameSite: 'strict',
@@ -76,6 +76,7 @@ export function LoginPage() {
             <form onSubmit={handleFormSubmit}>
               <fieldset className="form-group">
                 <input
+                  autoFocus
                   className="form-control form-control-lg"
                   type="text"
                   placeholder="Email"

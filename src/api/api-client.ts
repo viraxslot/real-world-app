@@ -1,7 +1,8 @@
 import { Config } from '../config/config';
 import { ClientErrors } from '../shared/client-errors';
+import { GLOBAL_FEED, YOUR_FEED } from '../shared/constants';
+import { Article } from '../shared/types';
 import {
-  AuthHeader,
   SignInRequest,
   SignUpResponseBody,
   SignUpRequest,
@@ -9,12 +10,19 @@ import {
   UserProfileResponseBody,
   ErrorResponse,
   ValidationError,
+  TagsResponseBody,
+  ArticlesRequestParams,
+  ArticleResponseBody,
+  ArticlesFeedRequestParams,
+  LikeArticleRequest,
+  FavoriteArticleResponseBody,
 } from './types';
 
 export class ApiClient {
   static apiUrl = Config.apiUrl;
-  static getAuthHeader = (token: string) => {
+  static getAuthHeaders = (token: string) => {
     return {
+      ...ApiClient.defaultHeaders,
       Authorization: `Token ${token}`,
     };
   };
@@ -37,6 +45,7 @@ export class ApiClient {
     try {
       body = await response.json();
     } catch (err) {
+      console.error(err);
       throw new Error(ClientErrors.unableToParseResponseBody);
     }
     return body;
@@ -56,48 +65,149 @@ export class ApiClient {
     }
   }
 
+  private static getURLParams(
+    options: Record<string, string | number | undefined>,
+    excludeFields: string[] = [],
+  ): string {
+    const params = new URLSearchParams('');
+
+    for (const key of Object.keys(options)) {
+      if (options[key] != null && !excludeFields.includes(key)) {
+        params.set(key, options[key]!.toString());
+      }
+    }
+
+    return params.toString();
+  }
+
   static async signUp(options: SignUpRequest): Promise<SignUpResponseBody | never> {
-    const response = await fetch(this.apiUrl + '/users', {
+    const response = await fetch(ApiClient.apiUrl + '/users', {
       method: 'POST',
-      headers: this.defaultHeaders,
+      headers: ApiClient.defaultHeaders,
       body: JSON.stringify(options),
     });
 
-    this.checkServerStatus(response.status);
-    const body = await this.getJsonBody(response);
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
     if (!response.ok) {
-      this.checkBodyErrors(body, ClientErrors.unableToRegister);
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToRegister);
     }
     return body;
   }
 
   static async signIn(options: SignInRequest): Promise<SignInResponseBody> {
-    const response = await fetch(this.apiUrl + '/users/login', {
+    const response = await fetch(ApiClient.apiUrl + '/users/login', {
       method: 'POST',
-      headers: this.defaultHeaders,
+      headers: ApiClient.defaultHeaders,
       body: JSON.stringify(options),
     });
 
-    this.checkServerStatus(response.status);
-    const body = await this.getJsonBody(response);
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
     if (!response.ok) {
-      this.checkBodyErrors(body, ClientErrors.unableToLogin);
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToLogin);
     }
     return body;
   }
 
-  static async userProfile(authHeader: AuthHeader): Promise<UserProfileResponseBody | never> {
-    const auth = this.getAuthHeader(authHeader.token);
-
-    const response = await fetch(this.apiUrl + '/user', {
+  static async userProfile(token: string): Promise<UserProfileResponseBody | never> {
+    const response = await fetch(ApiClient.apiUrl + '/user', {
       method: 'GET',
-      headers: { ...this.defaultHeaders, ...auth },
+      headers: ApiClient.getAuthHeaders(token),
     });
 
-    this.checkServerStatus(response.status);
-    const body = await this.getJsonBody(response);
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
     if (!response.ok) {
-      this.checkBodyErrors(body, ClientErrors.unableToGetUserProfile);
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetUserProfile);
+    }
+    return body;
+  }
+
+  static async tags(): Promise<TagsResponseBody> {
+    const response = await fetch(ApiClient.apiUrl + '/tags', {
+      method: 'GET',
+      headers: ApiClient.defaultHeaders,
+    });
+
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
+    if (!response.ok) {
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetTags);
+    }
+    return body;
+  }
+
+  static async articles(
+    options?: ArticlesRequestParams,
+    token?: string,
+  ): Promise<ArticleResponseBody> {
+    let url = '/articles';
+
+    if (options) {
+      let params = ApiClient.getURLParams(options, ['feedType']);
+      if (options?.feedType) {
+        const tag = ![GLOBAL_FEED, YOUR_FEED].includes(options?.feedType)
+          ? options?.feedType
+          : undefined;
+
+        params = ApiClient.getURLParams({ ...options, tag }, ['feedType']);
+      }
+      url += `?${params}`;
+    }
+
+    const response = await fetch(ApiClient.apiUrl + url, {
+      method: 'GET',
+      headers: ApiClient.getAuthHeaders(token ?? ''),
+    });
+
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
+    if (!response.ok) {
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetArticles);
+    }
+
+    if (options?.feedType === YOUR_FEED) {
+      body.articles = body.articles.filter((a: Article) => a.author.following);
+    }
+    return body;
+  }
+
+  static async articlesFeed(
+    options: ArticlesFeedRequestParams,
+    token?: string,
+  ): Promise<ArticleResponseBody> {
+    const params = ApiClient.getURLParams(options);
+    const url = `/articles/feed?${params}`;
+
+    const response = await fetch(ApiClient.apiUrl + url, {
+      method: 'GET',
+      headers: ApiClient.getAuthHeaders(token ?? ''),
+    });
+
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
+    if (!response.ok) {
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetArticles);
+    }
+    return body;
+  }
+
+  static async favoriteArticle(
+    options?: LikeArticleRequest,
+    token?: string,
+  ): Promise<FavoriteArticleResponseBody> {
+    const url = `/articles/${options?.slug}/favorite`;
+
+    const response = await fetch(ApiClient.apiUrl + url, {
+      method: options?.like ? 'POST' : 'DELETE',
+      headers: ApiClient.getAuthHeaders(token ?? ''),
+    });
+
+    ApiClient.checkServerStatus(response.status);
+    const body = await ApiClient.getJsonBody(response);
+    if (!response.ok) {
+      ApiClient.checkBodyErrors(body, ClientErrors.unableToGetArticles);
     }
     return body;
   }

@@ -1,12 +1,11 @@
-import Cookies from 'js-cookie';
 import { ReactNode, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../../context/auth-context';
 import { defaultAuth } from '../../context/auth-data';
 import { PageName, Paths } from '../../helpers/paths';
-import { CookieNames } from '../../shared/constants';
 import { HEADER_LOCATORS } from './Header.locators';
 import clsx from 'clsx';
+import cookieHelper from '../../helpers/cookie.helper';
 
 type HeaderItemProps = {
   link: string;
@@ -35,7 +34,7 @@ export function Header() {
 
   function handleLogout() {
     setAuth({ ...defaultAuth });
-    Cookies.remove(CookieNames.authToken);
+    cookieHelper.remove('jwt-token');
   }
 
   return (

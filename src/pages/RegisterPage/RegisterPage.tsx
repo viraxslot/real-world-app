@@ -61,6 +61,7 @@ export function RegisterPage() {
             <form onSubmit={handleSubmit}>
               <fieldset className="form-group">
                 <input
+                  autoFocus
                   data-testid={REGISTER_PAGE_LOCATORS.username}
                   className="form-control form-control-lg"
                   type="text"
